@@ -13,7 +13,7 @@
     <string name="projectedNI">Projected Net Income: </string>
     <string name="month">MONTH</string>
     <string name="year">YEAR</string>
-    <string name="dayText">DAY _</string>
+    <string name="dayText">DAY _:</string>
     <string name="workHour">00:00 __ - 00:00 __</string>
     <string name="requestCover">Request Cover</string>
     <string name="requestTimeOff">Request Time Off</string>
