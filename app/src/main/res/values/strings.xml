@@ -2,4 +2,22 @@
     <string name="app_name">OnTime</string>
     <string name="tab_text_1">Home</string>
     <string name="tab_text_2">Schedule</string>
+    <string name="tab_text_3">Settings</string>
+    <string name="payRate">Pay Rate: </string>
+    <string name="PayType">Pay Type: </string>
+    <string name="currentHW">Current Hours Worked: </string>
+    <string name="currentGI">Current Gross Income: </string>
+    <string name="currentNI">Current Net Income: </string>
+    <string name="projectedHW">Projected Hours Worked: </string>
+    <string name="projectedGI">Projected Gross Income: </string>
+    <string name="projectedNI">Projected Net Income: </string>
+    <string name="month">MONTH</string>
+    <string name="year">YEAR</string>
+    <string name="dayText">DAY _</string>
+    <string name="workHour">00:00 __ - 00:00 __</string>
+    <string name="requestCover">Request Cover</string>
+    <string name="requestTimeOff">Request Time Off</string>
+    <string name="calendarView">Calendar View</string>
+    <string name="nextWk">Next Week</string>
+    <string name="prevWk">Previous Week</string>
 </resources>
