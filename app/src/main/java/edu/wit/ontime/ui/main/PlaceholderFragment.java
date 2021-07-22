@@ -56,7 +56,7 @@ public class PlaceholderFragment extends Fragment {
         final TextView textView = binding.sectionLabel;
         pageViewModel.getText().observe(getViewLifecycleOwner(), s -> {
             textView.setText(s);
-            textView.setTextColor(Color.WHITE);
+            textView.setTextColor(Color.BLACK);
         });
         return root;
     }

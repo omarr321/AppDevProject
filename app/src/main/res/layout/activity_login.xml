@@ -22,6 +22,7 @@
 
     <Button
         android:id="@+id/button"
+        style="@style/Widget.AppCompat.Button.Borderless"
         android:layout_width="167dp"
         android:layout_height="63dp"
         android:text="Sign In"
@@ -29,7 +30,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView"
-        app:layout_constraintVertical_bias="0.377" />
+        app:layout_constraintVertical_bias="0.3" />
 
     <TextView
         android:id="@+id/textView"
