@@ -1,2 +1,2 @@
-[Home](/)
-[Guide](guide.md)
+* [Home](/)
+* [Schema](schema/README)
