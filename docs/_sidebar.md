@@ -1,2 +1,6 @@
 * [Home](/)
 * [Schema](schema/README)
+  - [users](schema/doc/user)
+  - [organization](schema/doc/organization)
+  - [schedule](schema/doc/schedule)
+* API Calls (Coming Soon...)
