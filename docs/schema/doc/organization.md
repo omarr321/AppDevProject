@@ -11,7 +11,7 @@ Global Rules:
 
 ## Fields
 
-|Field Name |Data Type |Description | Default Value |Security Rules |
+|Field Name |Data Type |Description | Default Value |Security Rules [admin] |
 --- | --- | --- | --- | ---
 |_id|string|Document ID used to reference this|\<uuid value\>|Allow Read|
 |org_name_legal|string|Legal name of the organization (Ex: Vinnin Square Liquors Inc.)|required|Allow Read/Write|
@@ -38,7 +38,7 @@ Global Rules:
 
 Global Rules: ```Allow Read/Write for *authenticated* users where 'role=admin' only.```
 
-|Field Name |Data Type |Description | Default Value |Security Rules |
+|Field Name |Data Type |Description | Default Value |Security Rules [admin] |
 --- | --- | --- | --- | ---
 |_id|string|Document ID used to reference this|\<uuid value\>|Allow Read|
 |user_id|ref: ```users```|Reference to user that belongs to organization|required|Allow Read|
