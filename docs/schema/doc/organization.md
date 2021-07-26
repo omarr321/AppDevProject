@@ -25,6 +25,7 @@ Global Rules: ```Allow Read/Write for *authenticated* users where 'role=admin' o
 --- | --- | ---
 |"schedules"|Stores all created work schedules that belong to an organization. Users are referenced in order to assign shifts.|[organization/schedule_id/_id](/schema/doc/schedule)|
 |"members"|Stores references of all users that belong (work) at this organization|[organization/member_id/_id](#members)|
+|"groups"|Stores job groups that are assigned to members. This is used to determine shift availability of a particular group. Groups are synonomous with job roles. An example of a group could be **"stock"** or **"cashier"**.|[organization/group_id/_id](#groups)|
 
 ## "members" Sub-collection Document (organization/member_id/_id)
 
@@ -39,6 +40,7 @@ Global Rules: ```Allow Read/Write for *authenticated* users where 'role=admin' o
 |time_joined|date/time|Timestamp of when the member was added to organization.|required|Allow Read|
 |status|string [enum]|The current status of the member in an organization|"active"|Allow Read/Write|
 |roles|Array[string [enum]]|The current role levels that a member can have. Different levels such as 'ORG_ADMIN' can grant permissions various within an organization.|["guest"]|Allow Read/Write
+|groups|Array[ref: ```groups```]|The groups that a member belongs to in an organization. Assigning the group to a member makes schedules with that group visible and makes them available|[]|Allow Read/Write
 
 ### status enums:
 |Enum |Description |
