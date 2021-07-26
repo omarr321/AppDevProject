@@ -2,6 +2,15 @@
 
 > A schedule manager for both workers and managers.
 
+### Programming Team:
+* [Giovanni Rico](mailto:ricog@wit.edu)
+* [Wyatt Phillips](mailto:phillipsw1@wit.edu)
+* [Omar Radwan](mailto:radwano@wit.edu)
+
+**Documentation Author:** Wyatt Phillips
+
+---
+
 ## Table of Contents
 * [Home](/)
 * [Schema](schema/README)
