@@ -31,6 +31,8 @@ Global Rules:
 
 ## Fields
 
+// TODO: Possibly make 'asignee' a seperate sub-collection
+
 |Field Name |Data Type |Description | Default Value |Security Rules [admin] |
 --- | --- | --- | --- | ---
 |_id|string|Document ID used to reference this|\<uuid value\>|Allow Read|
@@ -39,6 +41,11 @@ Global Rules:
 |time_end|date/time|Timestamp of when the event starts.|required|Allow Read/Write|
 |occurence|Array[string [enum: weekday]]|The repetition of the event. (Ex: An event could be "every monday" or "everyday" for consistency.)|[]|Allow Read/Write|
 |group|ref: ```groups```|Required group to be allocated. All members apart of the group can be assigned to shift event.|required|Allow Read/Write|
+|assignee|Array[Map{...}]|A member can be assigned to a specific occurence of a shift, which is why an object is used to indicate the occurence day.|[]|Allow Read/Write|
+|\\ member|ref: ```members```|The member assigned to the shift occurence|required|^|
+|\\ occurence|date/time|The specific instance of the occurence a worker is assigned to|required|^|
+
+---
 
 ### "weekday" enums
 
