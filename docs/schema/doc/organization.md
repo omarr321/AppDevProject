@@ -17,7 +17,7 @@ Global Rules:
 |org_name_legal|string|Legal name of the organization (Ex: Vinnin Square Liquors Inc.)|required|Allow Read/Write|
 |ein|string: **ein**|Employer Identification Number (EIN) of the legal company|0|Allow Read/Write|
 |org_name|string|Name that is displayed to users on application (Ex: Vinnin Liquors)|required|Allow Read/Write|
-|**contact**|Map (Object)|An object containing the contact information of this organization.|{...}|Allow Read/Write|
+|**contact**|Map{...} (Object)|An object containing the contact information of this organization.|{...}|Allow Read/Write|
 |\\ phone|string: **phone**|The phone number of organization|""|^|
 |\\ address|string|The number and street name of organization|""|^|
 |\\ city|string|The city that organization resides|""|^|
@@ -28,11 +28,16 @@ Global Rules:
 ## Sub-collections
 |Collection Name |Description |Document Schema |
 --- | --- | ---
-|"schedules"|Stores all created work schedules that belong to an organization. Users are referenced in order to assign shifts.|[organization/schedule_id/_id](/schema/doc/schedule)|
-|"members"|Stores references of all users that belong (work) at this organization|[organization/member_id/_id](#members)|
-|"groups"|Stores job groups that are assigned to members. This is used to determine shift availability of a particular group. Groups are synonomous with job roles. An example of a group could be **"stock"** or **"cashier"**.|[organization/group_id/_id](#groups)|
+|"schedules"|Stores all created work schedules that belong to an organization. Users are referenced in order to assign shifts.|[organization/schedule_id](/schema/doc/schedule)|
+|"members"|Stores references of all users that belong (work) at this organization|[organization/member_id](#members)|
+|"groups"|Stores job groups that are assigned to members. This is used to determine shift availability of a particular group. Groups are synonomous with job roles. An example of a group could be **"stock"** or **"cashier"**.|[organization/group_id](#groups)|
 
-## "members" Sub-collection Document (organization/member_id/_id)
+
+// TODO: Add 'groups' docs
+
+---
+
+## Members
 
 > Stores references of all users that belong (work) at this organization. They can be managed by **admins** and assigned to schedules in that sub-collection.
 
@@ -46,6 +51,8 @@ Global Rules: ```Allow Read/Write for *authenticated* users where 'role=admin' o
 |status|string [enum]|The current status of the member in an organization|"active"|Allow Read/Write|
 |roles|Array[string [enum]]|The current role levels that a member can have. Different levels such as 'ORG_ADMIN' can grant permissions various within an organization.|["guest"]|Allow Read/Write
 |groups|Array[ref: ```groups```]|The groups that a member belongs to in an organization. Assigning the group to a member makes schedules with that group visible and makes them available|[]|Allow Read/Write
+
+---
 
 ### status enums:
 |Enum |Description |
