@@ -40,14 +40,15 @@
     </LinearLayout>
 
     <TextView
-        android:gravity="center"
         android:id="@+id/month"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
+        android:gravity="center"
         android:text="@string/month"
         android:textSize="45sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnMenu" />
 
