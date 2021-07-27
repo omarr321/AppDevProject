@@ -29,6 +29,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 1:  return ScheduleViewFragment.newInstance("test");
+            case 2:  return ProfileFragment.newInstance("profile");
             default: return PlaceholderFragment.newInstance(position + 1);
         }
 

@@ -130,9 +130,16 @@ public class SignInActivity extends Activity {
 
     private void updateUI(FirebaseUser user) {
         if(user == null){
-            showResult("Login Unsuccessful - please only use wit.edu emails");
+            //showResult("Login Unsuccessful");
         }else{
             //When successful transfer user to their account page
+
+            Bundle bundle = new Bundle();
+            bundle.putParcelable("user",user);
+            ProfileFragment fragment = new ProfileFragment();
+            fragment.setArguments(bundle);
+
+
             Intent intent = new Intent(SignInActivity.this, MainActivity.class);
             intent.setFlags(FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_CLEAR_TASK);
             intent.putExtra("user",user);
