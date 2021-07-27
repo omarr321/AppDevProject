@@ -45,12 +45,5 @@
             android:text="Logout"
             android:layout_marginTop="30dp"/>
 
-        <Button
-            android:id="@+id/Return"
-            android:layout_width="327dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:onClick="returnProfile"
-            android:text="Return to Home" />
     </LinearLayout>
 </RelativeLayout>

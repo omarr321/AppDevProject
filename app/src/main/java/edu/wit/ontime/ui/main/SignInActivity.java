@@ -130,7 +130,7 @@ public class SignInActivity extends Activity {
 
     private void updateUI(FirebaseUser user) {
         if(user == null){
-            //showResult("Login Unsuccessful");
+            showResult("Login Unsuccessful");
         }else{
             //When successful transfer user to their account page
 

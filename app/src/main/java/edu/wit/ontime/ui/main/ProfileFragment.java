@@ -38,7 +38,7 @@ public class ProfileFragment extends Fragment implements GoogleApiClient.OnConne
     GoogleApiClient googleApiClient;
     GoogleSignInOptions gso;
     GoogleSignInAccount account;
-
+    private ProfileFragment ProfileFragment;
 
 
     @Override
@@ -55,13 +55,18 @@ public class ProfileFragment extends Fragment implements GoogleApiClient.OnConne
         profile = v.findViewById(R.id.profileImage);
         logout.setOnClickListener(logoutUser);
 
-        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
-        googleApiClient = new GoogleApiClient.Builder(getActivity())
-                .enableAutoManage(getActivity(), this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
+        if(userID.getText().toString().equals("id")){
+            gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestEmail()
+                    .requestIdToken(getString(R.string.web_client_id))
+                    .build();
+            googleApiClient = new GoogleApiClient.Builder(getActivity())
+                    .enableAutoManage(getActivity(), this)
+                    .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                    .build();
+        }
+
+
 
         return v;
     }
@@ -69,13 +74,17 @@ public class ProfileFragment extends Fragment implements GoogleApiClient.OnConne
     @Override
     public void onStart() {
         super.onStart();
-        OptionalPendingResult opr = Auth.GoogleSignInApi.silentSignIn(googleApiClient);
-        if(opr.isDone()){
-            GoogleSignInResult result = (GoogleSignInResult) opr.get();
-            handleSignIn(result);
-        } else {
-            opr.setResultCallback(googleSignInResult -> handleSignIn((GoogleSignInResult) googleSignInResult));
+
+        if(userID.getText().toString().equals("id")){
+            OptionalPendingResult <GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(googleApiClient);
+            if(opr.isDone()){
+                GoogleSignInResult result = opr.get();
+                handleSignIn(result);
+            } else {
+                opr.setResultCallback(googleSignInResult -> handleSignIn(googleSignInResult));
+            }
         }
+
     }
 
     public static ProfileFragment newInstance(String text) {
@@ -96,6 +105,7 @@ public class ProfileFragment extends Fragment implements GoogleApiClient.OnConne
             userEmail.setText(account.getEmail());
             userID.setText(account.getId());
         }
+
         try{
             Glide.with(getActivity()).load(account.getPhotoUrl()).into(profile);
         } catch(NullPointerException e){
