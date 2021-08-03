@@ -32,9 +32,6 @@ Global Rules:
 |"members"|Stores references of all users that belong (work) at this organization|[organization/member_id](#members)|
 |"groups"|Stores job groups that are assigned to members. This is used to determine shift availability of a particular group. Groups are synonomous with job roles. An example of a group could be **"stock"** or **"cashier"**.|[organization/group_id](#groups)|
 
-
-// TODO: Add 'groups' docs
-
 ---
 
 ## Members
@@ -48,7 +45,7 @@ Global Rules: ```Allow Read/Write for *authenticated* users where 'role=admin' o
 |_id|string|Document ID used to reference this|\<uuid value\>|Allow Read|
 |user_id|ref: ```users```|Reference to user that belongs to organization|required|Allow Read|
 |time_joined|date/time|Timestamp of when the member was added to organization.|required|Allow Read|
-|status|string [enum]|The current status of the member in an organization|"active"|Allow Read/Write|
+|status|string [[enum]](#status-enums)|The current status of the member in an organization|"active"|Allow Read/Write|
 |roles|Array[string [enum]]|The current role levels that a member can have. Different levels such as 'ORG_ADMIN' can grant permissions various within an organization.|["guest"]|Allow Read/Write
 |groups|Array[ref: ```groups```]|The groups that a member belongs to in an organization. Assigning the group to a member makes schedules with that group visible and makes them available|[]|Allow Read/Write
 |**pay**|Map{...} (Object)|Contains information to calculate payment stubs.|{...}|Allow Read/Write|
@@ -56,6 +53,18 @@ Global Rules: ```Allow Read/Write for *authenticated* users where 'role=admin' o
 |\\ amount|number|the rate a worker is paid depending on it's type. |0.00|^|
 |\\ occurence|string [[enum]](#occurence-enums)|Required if ```pay.type == "salary"```. The frequency at which a worker's salary is paid.|"yearly"|^|
 
+## Groups
+
+> Also known as roles/occupations within an organization. Events in a schedule use groups to assign workers when needed. Groups are dynamic entries that are customizable by the user. For example, a grocery store may have groups such as "stock", "cashier", or "assistant-manager".
+
+Global Rules: ```Allow Read/Write for *authenticated* users where 'role=admin' only.```
+
+|Field Name |Data Type |Description | Default Value |Security Rules [admin] |
+--- | --- | --- | --- | ---
+|_id|string|Document ID used to reference this|\<uuid value\>|Allow Read|
+|title|string|The displayable name of the group. Ex: "stock"|"Untitled Group"|Allow Read/Write|
+|time_created|date/time|Timestamp of when the group was created.|required|Allow Read|
+|time_lastupdated|date/time|Timestamp of when the group was last updated|required|Allow Read|
 ---
 
 ### status enums:
