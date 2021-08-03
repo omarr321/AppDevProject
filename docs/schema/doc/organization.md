@@ -101,3 +101,5 @@ Global Rules: ```Allow Read/Write for *authenticated* users where 'role=admin' o
 ```
 "daily", "weekly", "bi-weekly", "monthly", "quarterly", "yearly"
 ```
+
+- Yes, people can get paid daily. Just ask omar!
