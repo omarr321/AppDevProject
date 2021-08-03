@@ -15,9 +15,12 @@ import com.bumptech.glide.Glide;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
@@ -68,6 +71,8 @@ public class ProfileFragment extends Fragment implements GoogleApiClient.OnConne
 
 
 
+
+
         return v;
     }
 
@@ -109,7 +114,8 @@ public class ProfileFragment extends Fragment implements GoogleApiClient.OnConne
         try{
             Glide.with(getActivity()).load(account.getPhotoUrl()).into(profile);
         } catch(NullPointerException e){
-            Toast.makeText(getActivity(), "image not found", Toast.LENGTH_LONG).show();
+            System.out.println(e);
+            //Toast.makeText(getActivity(), "image not found", Toast.LENGTH_LONG).show();
         }
 
 
@@ -123,12 +129,25 @@ public class ProfileFragment extends Fragment implements GoogleApiClient.OnConne
 
 
     private void signOut(){
+
+        GoogleSignInClient googleClient = GoogleSignIn.getClient(getActivity(),gso);
+        googleClient.signOut();
+
         Intent intent = new Intent(getActivity().getBaseContext(),SignInActivity.class);
+        intent.putExtra("boolean",true);
         startActivity(intent);
     }
 
     @Override
     public void onConnectionFailed(@NonNull @NotNull ConnectionResult connectionResult) {
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        googleApiClient.stopAutoManage(getActivity());
+        googleApiClient.disconnect();
 
     }
 }

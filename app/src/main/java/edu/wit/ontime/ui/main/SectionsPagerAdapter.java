@@ -8,6 +8,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
+import java.util.Random;
+
 import edu.wit.ontime.R;
 
 /**
@@ -17,7 +19,7 @@ import edu.wit.ontime.R;
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     @StringRes
-    private static final int[] TAB_TITLES = new int[]{R.string.tab_text_1, R.string.tab_text_2, R.string.tab_text_3};
+    private static final int[] TAB_TITLES = new int[]{R.string.tab_text_1, R.string.tab_text_2, R.string.tab_text_4,R.string.tab_text_3};
     private final Context mContext;
 
     public SectionsPagerAdapter(Context context, FragmentManager fm) {
@@ -29,8 +31,9 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 1:  return ScheduleViewFragment.newInstance("test");
-            case 2:  return ProfileFragment.newInstance("profile");
-            default: return PlaceholderFragment.newInstance(position + 1);
+            case 2:  return PayStubFragment.newInstance("test");
+            case 3:  return ProfileFragment.newInstance("test");
+            default: return HomeFragment.newInstance("test");
         }
 
 
@@ -45,6 +48,11 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     @Override
     public int getCount() {
         // Show 2 total pages.
-        return 3;
+        return 4;
     }
+
+    public int getItemPosition(Object object) {
+        return POSITION_NONE;
+    }
+
 }

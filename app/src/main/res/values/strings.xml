@@ -3,6 +3,7 @@
     <string name="tab_text_1">Home</string>
     <string name="tab_text_2">Schedule</string>
     <string name="tab_text_3">Settings</string>
+    <string name="tab_text_4">Pay Stub</string>
     <string name="payRate">Pay Rate: </string>
     <string name="PayType">Pay Type: </string>
     <string name="currentHW">Current Hours Worked: </string>

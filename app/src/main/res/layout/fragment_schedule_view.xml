@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="@color/grey"
     android:layout_height="match_parent">
 
     <LinearLayout
@@ -63,41 +64,53 @@
         app:layout_constraintTop_toBottomOf="@+id/month" />
 
     <Button
-        android:id="@+id/nextWeek"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="27dp"
-        android:text="@string/nextWk"
+        android:id="@+id/prevWeek"
+        android:layout_width="152dp"
+        android:layout_height="41dp"
+        android:background="#FFFFFF"
+        android:text="@string/prevWk"
+        android:textColor="#000000"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/prevWeek"
-        app:layout_constraintTop_toBottomOf="@+id/month" />
+        app:layout_constraintHorizontal_bias="0.061"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.214" />
 
     <Button
-        android:id="@+id/prevWeek"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="27dp"
-        android:text="@string/prevWk"
-        app:layout_constraintEnd_toStartOf="@+id/nextWeek"
+        android:id="@+id/nextWeek"
+        android:layout_width="152dp"
+        android:layout_height="41dp"
+        android:background="#FFFFFF"
+        android:text="@string/nextWk"
+        android:textColor="#000000"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.938"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/month" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.214" />
 
     <LinearLayout
-        android:gravity="center"
         android:id="@+id/DayGroup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
+        android:layout_width="405dp"
+        android:layout_height="251dp"
+
+        android:layout_marginTop="8dp"
+        android:gravity="center"
         android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.25"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/year">
+        app:layout_constraintTop_toBottomOf="@+id/year"
+        app:layout_constraintVertical_bias="0.263">
 
         <LinearLayout
-            android:gravity="center"
             android:id="@+id/dayOneGroup"
             android:layout_width="420dp"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:orientation="horizontal">
 
             <TextView
@@ -121,10 +134,10 @@
         </LinearLayout>
 
         <LinearLayout
-            android:gravity="center"
             android:id="@+id/dayTwoGroup"
             android:layout_width="420dp"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:orientation="horizontal">
 
             <TextView
@@ -147,10 +160,10 @@
         </LinearLayout>
 
         <LinearLayout
-            android:gravity="center"
             android:id="@+id/dayThreeGroup"
             android:layout_width="420dp"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:orientation="horizontal">
 
             <TextView
@@ -173,10 +186,10 @@
         </LinearLayout>
 
         <LinearLayout
-            android:gravity="center"
             android:id="@+id/dayFourGroup"
             android:layout_width="420dp"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:orientation="horizontal">
 
             <TextView
@@ -199,10 +212,10 @@
         </LinearLayout>
 
         <LinearLayout
-            android:gravity="center"
             android:id="@+id/dayFiveGroup"
             android:layout_width="420dp"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:orientation="horizontal">
 
             <TextView
@@ -225,10 +238,10 @@
         </LinearLayout>
 
         <LinearLayout
-            android:gravity="center"
             android:id="@+id/daySixGroup"
             android:layout_width="420dp"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:orientation="horizontal">
 
             <TextView
@@ -251,10 +264,10 @@
         </LinearLayout>
 
         <LinearLayout
-            android:gravity="center"
             android:id="@+id/daySevenGroup"
             android:layout_width="420dp"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:orientation="horizontal">
 
             <TextView
@@ -278,33 +291,38 @@
     </LinearLayout>
 
     <LinearLayout
-        android:gravity="center"
         android:id="@+id/funtBtnGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
+        android:gravity="center"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintHorizontal_bias="0.461"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.942">
 
         <Button
             android:id="@+id/requestCover"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/requestCover" />
+            android:text="@string/requestCover"
+            android:textColor="#000000" />
 
         <Button
             android:id="@+id/requestTimeOff"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/requestTimeOff" />
+            android:text="@string/requestTimeOff"
+            android:textColor="#000000" />
 
         <Button
             android:id="@+id/calendarView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/calendarView" />
+            android:text="@string/calendarView"
+            android:textColor="#000000" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
