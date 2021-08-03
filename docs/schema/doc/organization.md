@@ -91,6 +91,7 @@ Global Rules: ```Allow Read/Write for *authenticated* users where 'role=admin' o
 |```guest```|The placeholder role that allows for a member to spectate the organization and their schedules. Lowest level of permissions are granted for this role.|
 |```worker```|Standard role for a non-managerial member. They can be added to a schedule and make general requests for shift preferences and time off. They cannot directly modify the schedules and organization unlike managers.
 |```manager```|Standard role for a managerial member. More permissions are enabled within the organization, as they are able to modify certain schedules and their rosters (assigned members).|
+|```owner```|Special role that inherits privilages to "manager".|
 |```admin```|Highest permission level for member. Such members with this role has full access to the organization and their schedules. For this doc page, the 'Security Rules' uses refer to the acess a member with this role has.|
 
 ### occurence enums
