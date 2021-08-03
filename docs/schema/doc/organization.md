@@ -99,5 +99,5 @@ Global Rules: ```Allow Read/Write for *authenticated* users where 'role=admin' o
 > Worker will recieve their salary based on the frequency selected below.
 
 ```
-"daily", "weekly", "semi-monthly", "monthly", "quarterly", "semi-yearly", "yearly"
+"daily", "weekly", "bi-weekly", "monthly", "quarterly", "yearly"
 ```
