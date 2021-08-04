@@ -9,7 +9,7 @@
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/grey"
+        android:background="@color/light_grey"
         android:theme="@style/Theme.OnTime.AppBarOverlay">
 
         <TextView
@@ -35,7 +35,7 @@
             android:id="@+id/tabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/grey"
+            android:background="@color/light_grey"
             app:tabIndicatorColor="@color/white"
             app:tabMode="fixed"
             app:tabSelectedTextColor="@color/white"

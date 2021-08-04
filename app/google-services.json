@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "384009692135",
+    "project_id": "ontime-5b0b8",
+    "storage_bucket": "ontime-5b0b8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:384009692135:android:21ecd6f05acb24ba611342",
+        "android_client_info": {
+          "package_name": "edu.wit.ontime"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "384009692135-67ka6tseqptj6ui8fc1l5e1kj9hov7ru.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "edu.wit.ontime",
+            "certificate_hash": "dc2f2f369b94f7ded6ea6a18151314c80dd3244c"
+          }
+        },
+        {
+          "client_id": "384009692135-a0t244vsl07h8of81tflgr1kbmp16k4v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBhuD-nBbkZocfRrUi4c-kvArrphea4ZEU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "384009692135-a0t244vsl07h8of81tflgr1kbmp16k4v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
