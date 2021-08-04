@@ -1,4 +1,4 @@
-# "schedule" Document (organization/schedule_id/_id)
+# "schedule" Document (organization_id/schedules/_id)
 
 > Description: A shift schedule that belongs in an organization. Because an organization can have multiple schedules, they can be configured by the mangers to allocate various groups to shifts.
 
