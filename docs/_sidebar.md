@@ -7,4 +7,4 @@
     - [schedule](schema/doc/schedule)
     - [member](schema/doc/member)
     - [group](schema/doc/group)
-* API Calls (Coming Soon...)
+* [API Calls](api/README)
