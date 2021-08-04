@@ -13,4 +13,4 @@ While some actions to the database are only possible through API calls, as enfor
 --- | --- | ---
 |"users"|Stores the information of each user within the service.|[users/_id](/schema/doc/user)|
 |"organization"|Stores information about an organization's users, schedules, and policies.|[organization/_id](/schema/doc/organization)|
-|\| "schedules"|**A sub-collection of organization.** Stores all created work schedules that belong to an organization. Users are referenced in order to assign shifts.|[organization/schedule_id/_id](/schema/doc/schedule)|
+|\ "schedules"|**A sub-collection of organization.** Stores all created work schedules that belong to an organization. Users are referenced in order to assign shifts.|[organization/schedule_id/_id](/schema/doc/schedule)|

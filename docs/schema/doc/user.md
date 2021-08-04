@@ -17,6 +17,6 @@ Global Rules: ```Allow Read/Write for *authenticated* user only.```
 |name_last|string|Last legal name of user|required|Allow Read/Write|
 |dob|date|The birthday of user|required|Allow Read/Write|
 |**phones**|Map (Object)|Contains the different phone numbers a user is associated with.|{...}|Allow Read/Write|
-|\| phones.home|string: **phone**|The home phone number of the user|""|^|
-|\| phones.work|string: **phone**|The work phone number of the user|""|^|
-|\| phones.cell|string: **phone**|The cellpone phone number of the user|""|^|
+|\\ phones.home|string: **phone**|The home phone number of the user|""|^|
+|\\ phones.work|string: **phone**|The work phone number of the user|""|^|
+|\\ phones.cell|string: **phone**|The cellpone phone number of the user|""|^|
