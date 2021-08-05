@@ -20,9 +20,19 @@ Global Rules: ```Allow Read/Write for *authenticated* users where 'role=admin' o
 ---
 
 ### status enums:
+
+> On-duty status
+
 |Enum |Description |
 --- | ---
-|```active```|Member is currently working for the organization.|
+|```working```|Member is currently working a shift.|
+|```break```|Member is taking a break during a shift.|
+
+> Off-duty status
+
+|Enum |Description |
+ --- | ---
+|```active```|Member is working for the organization, but is not currently on duty.|
 |```hold```|Member's job is currently on hold.|
 |```leave```|Member is currently on leave.|
 |```terminated```|Member was terminated from organization.|
