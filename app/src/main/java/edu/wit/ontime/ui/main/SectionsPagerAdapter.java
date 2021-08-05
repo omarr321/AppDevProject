@@ -30,7 +30,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         switch (position) {
-            case 1:  return ScheduleViewFragment.newInstance("test");
+            case 1:  return HostedFragmentTest.newInstance("test");
             case 2:  return PayStubFragment.newInstance("test");
             case 3:  return ProfileFragment.newInstance("test");
             default: return HomeFragment.newInstance("test");

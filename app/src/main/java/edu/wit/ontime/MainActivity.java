@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import edu.wit.ontime.ui.main.CalanderFragment;
+import edu.wit.ontime.ui.main.HostedFragmentTest;
 import edu.wit.ontime.ui.main.ProfileFragment;
 import edu.wit.ontime.ui.main.ScheduleViewFragment;
 import edu.wit.ontime.ui.main.SectionsPagerAdapter;
@@ -24,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
     public static ViewPager viewPager;
+    SectionsPagerAdapter sectionsPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
 
         Fragment[] test = {ScheduleViewFragment.newInstance("string"), ProfileFragment.newInstance("test"), CalanderFragment.newInstance("Stest")};
 
-        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
+        sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
         viewPager = binding.viewPager;
         viewPager.setAdapter(sectionsPagerAdapter);
         TabLayout tabs = binding.tabs;
@@ -50,8 +52,9 @@ public class MainActivity extends AppCompatActivity {
          */
     }
 
-    public static void restartView(){
-        viewPager.getAdapter().notifyDataSetChanged();
+    public void openNewContentFragment(String test) {
+        HostedFragmentTest hostFragment = (HostedFragmentTest) sectionsPagerAdapter.getItem(viewPager.getCurrentItem());
+        hostFragment.replaceFragment(CalanderFragment.newInstance(test), true);
     }
 
 }
