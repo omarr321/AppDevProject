@@ -21,7 +21,7 @@ Global Rules:
 ## Sub-collections
 |Collection Name |Description |Document Schema |
 --- | --- | ---
-|Events|All the time allocations within a schedule. Most events are shift times and can be usually occuring (Ex: Every Monday 2pm-10pm). An event can be assigned to a member apart of the corresponding group.|[schedule/event_id/_id](#event)
+|"events"|All the time allocations within a schedule. Most events are shift times and can be usually occuring (Ex: Every Monday 2pm-10pm). An event can be assigned to a member apart of the corresponding group.|[.../schedule_id/events/_id](#event)
 
 ---
 
@@ -39,15 +39,15 @@ Global Rules:
 |title|string|Working title of event (name)|"Untitled Event"|Allow Read/Write|
 |time_start|date/time|Timestamp of when the event starts.|required|Allow Read/Write|
 |time_end|date/time|Timestamp of when the event starts.|required|Allow Read/Write|
-|occurence|Array[string [enum: weekday]]|The repetition of the event. (Ex: An event could be "every monday" or "everyday" for consistency.)|[]|Allow Read/Write|
+|occurrence|Array[string [[enum]](#weekday-enums)|The repetition of the event. (Ex: An event could be "every monday" or "everyday" for consistency.)|[]|Allow Read/Write|
 |group|ref: ```groups```|Required group to be allocated. All members apart of the group can be assigned to shift event.|required|Allow Read/Write|
 |assignee|Array[Map{...}]|A member can be assigned to a specific occurence of a shift, which is why an object is used to indicate the occurence day.|[]|Allow Read/Write|
 |\\ member|ref: ```members```|The member assigned to the shift occurence|required|^|
-|\\ occurence|date/time|The specific instance of the occurence a worker is assigned to|required|^|
+|\\ occurrence|date/time|The specific instance of the occurence a worker is assigned to|required|^|
 
 ---
 
-### "weekday" enums
+### weekday enums:
 
 ```
 "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday", "all"

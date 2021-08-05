@@ -45,7 +45,7 @@ Global Rules: ```Allow Read/Write for *authenticated* users where 'role=admin' o
 |```owner```|Special role that inherits privilages to "manager".|
 |```admin```|Highest permission level for member. Such members with this role has full access to the organization and their schedules. For this doc page, the 'Security Rules' uses refer to the acess a member with this role has.|
 
-### occurence enums
+### occurrence enums:
 
 > Worker will recieve their salary based on the frequency selected below.
 
