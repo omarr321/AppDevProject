@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--This page exepects the user authancation and start date of the data wanted from the database-->
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:background="@color/grey"
+    android:id="@+id/test123"
     android:layout_height="match_parent">
 
     <LinearLayout
@@ -16,88 +17,97 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <Button
-            android:id="@+id/btnHome"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/tab_text_1" />
-
-        <Button
-            android:id="@+id/btnSchl"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/tab_text_2" />
-
-        <Button
-            android:id="@+id/btnSetting"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/tab_text_3" />
-
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/month"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
-        android:gravity="center"
-        android:text="@string/month"
-        android:textSize="45sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnMenu" />
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
         android:id="@+id/year"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="181dp"
+        android:layout_marginEnd="180dp"
+        android:layout_marginBottom="477dp"
         android:text="@string/year"
+        android:textColor="#FFFFFF"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/month" />
 
-    <Button
-        android:id="@+id/prevWeek"
-        android:layout_width="152dp"
-        android:layout_height="41dp"
-        android:background="#FFFFFF"
-        android:text="@string/prevWk"
-        android:textColor="#000000"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <TextView
+        android:id="@+id/month"
+        android:layout_width="wrap_content"
+        android:layout_height="75dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="95dp"
+        android:layout_marginEnd="97dp"
+        android:layout_marginBottom="493dp"
+        android:gravity="center"
+        android:text="@string/month"
+        android:textColor="#FFFFFF"
+        android:textSize="48sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.061"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.214" />
+        app:layout_constraintTop_toBottomOf="@+id/month"
+        tools:ignore="NotSibling" />
 
-    <Button
-        android:id="@+id/nextWeek"
-        android:layout_width="152dp"
-        android:layout_height="41dp"
-        android:background="#FFFFFF"
-        android:text="@string/nextWk"
-        android:textColor="#000000"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.938"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.214" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="404dp">
+
+        <Button
+            android:id="@+id/prevWeek"
+            android:layout_width="152dp"
+            android:layout_height="41dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="11dp"
+            android:layout_marginEnd="74dp"
+            android:layout_marginBottom="424dp"
+            android:layout_toStartOf="@+id/nextWeek"
+            android:background="#FFFFFF"
+            android:text="@string/prevWk"
+            android:textColor="#000000"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.061"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.214" />
+
+        <Button
+            android:id="@+id/nextWeek"
+            android:layout_width="154dp"
+            android:layout_height="43dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="424dp"
+            android:background="#FFFFFF"
+            android:text="@string/nextWk"
+            android:textColor="#000000"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.938"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.214" />
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/DayGroup"
         android:layout_width="405dp"
         android:layout_height="251dp"
 
+        android:layout_alignParentBottom="true"
         android:layout_marginTop="8dp"
+        android:layout_marginBottom="166dp"
         android:gravity="center"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -295,6 +305,12 @@
         android:id="@+id/funtBtnGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/DayGroup"
+        android:layout_alignBottom="@+id/DayGroup"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="268dp"
+        android:layout_marginEnd="111dp"
+        android:layout_marginBottom="-161dp"
         android:gravity="center"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -326,4 +342,4 @@
             android:textColor="#000000" />
     </LinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>
