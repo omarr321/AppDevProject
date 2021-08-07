@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,17 +15,27 @@ import edu.wit.ontime.MainActivity;
 import edu.wit.ontime.R;
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.Date;
 
 public class ScheduleViewFragment extends Fragment {
     Button logout;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+        //Date startDate = new Date(savedInstanceState.getLong("startDate"));
 
         View v = inflater.inflate(R.layout.fragment_schedule_view, container, false);
         TextView year = (TextView) v.findViewById(R.id.year);
@@ -52,7 +63,26 @@ public class ScheduleViewFragment extends Fragment {
         TextView day7Text = (TextView) v.findViewById(R.id.daySevenText);
         TextView day7WH = (TextView) v.findViewById(R.id.daySevenWH);
 
-        CollectionReference users = db.collection("");
+        CollectionReference users = db.collection("users");
+        String authTok = FirebaseAuth.getInstance().getUid();
+        Log.d("Token", authTok);
+        users
+                .whereEqualTo("auth_id", authTok)
+        .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d("User", document.getId() + " => " + document.getData());
+                            }
+                        } else {
+                            Log.d("User", "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+
+        CollectionReference org = db.collection("organizations");
 
         logout = v.findViewById(R.id.calendarView);
         logout.setOnClickListener(logoutUser1);
