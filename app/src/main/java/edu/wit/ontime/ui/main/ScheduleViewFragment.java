@@ -17,12 +17,15 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class ScheduleViewFragment extends Fragment {
     Button logout;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
         View v = inflater.inflate(R.layout.fragment_schedule_view, container, false);
         TextView year = (TextView) v.findViewById(R.id.year);
         TextView month = (TextView) v.findViewById(R.id.month);
@@ -48,6 +51,8 @@ public class ScheduleViewFragment extends Fragment {
 
         TextView day7Text = (TextView) v.findViewById(R.id.daySevenText);
         TextView day7WH = (TextView) v.findViewById(R.id.daySevenWH);
+
+        CollectionReference users = db.collection("");
 
         logout = v.findViewById(R.id.calendarView);
         logout.setOnClickListener(logoutUser1);
