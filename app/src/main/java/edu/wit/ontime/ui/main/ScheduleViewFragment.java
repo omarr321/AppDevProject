@@ -24,7 +24,30 @@ public class ScheduleViewFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_schedule_view, container, false);
+        TextView year = (TextView) v.findViewById(R.id.year);
+        TextView month = (TextView) v.findViewById(R.id.month);
 
+
+        TextView day1Text = (TextView) v.findViewById(R.id.dayOneText);
+        TextView day1WH = (TextView) v.findViewById(R.id.dayOneWH);
+
+        TextView day2Text = (TextView) v.findViewById(R.id.dayTwoText);
+        TextView day2WH = (TextView) v.findViewById(R.id.dayTwoWH);
+
+        TextView day3Text = (TextView) v.findViewById(R.id.dayThreeText);
+        TextView day3WH = (TextView) v.findViewById(R.id.dayThreeWH);
+
+        TextView day4Text = (TextView) v.findViewById(R.id.dayFourText);
+        TextView day4WH = (TextView) v.findViewById(R.id.dayFourWH);
+
+        TextView day5Text = (TextView) v.findViewById(R.id.dayFiveText);
+        TextView day5WH = (TextView) v.findViewById(R.id.dayFiveWH);
+
+        TextView day6Text = (TextView) v.findViewById(R.id.daySixText);
+        TextView day6WH = (TextView) v.findViewById(R.id.daySixWH);
+
+        TextView day7Text = (TextView) v.findViewById(R.id.daySevenText);
+        TextView day7WH = (TextView) v.findViewById(R.id.daySevenWH);
 
         logout = v.findViewById(R.id.calendarView);
         logout.setOnClickListener(logoutUser1);
@@ -46,6 +69,7 @@ public class ScheduleViewFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //FirebaseAuth.getInstance().getAccessToken(true);
 
         // This callback will only be called when MyFragment is at least Started.
         OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
