@@ -3,6 +3,7 @@
     <string name="tab_text_1">Home</string>
     <string name="tab_text_2">Schedule</string>
     <string name="tab_text_3">Settings</string>
+    <string name="tab_text_4">Pay Stub</string>
     <string name="payRate">Pay Rate: </string>
     <string name="PayType">Pay Type: </string>
     <string name="currentHW">Current Hours Worked: </string>
@@ -20,4 +21,5 @@
     <string name="calendarView">Calendar View</string>
     <string name="nextWk">Next Week</string>
     <string name="prevWk">Previous Week</string>
+    <string name="web_client_id">384009692135-a0t244vsl07h8of81tflgr1kbmp16k4v.apps.googleusercontent.com</string>
 </resources>

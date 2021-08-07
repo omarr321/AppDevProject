@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:id="@+id/test321"
+    android:layout_height="match_parent"
+    android:background="@color/grey">
+
+
+    <CalendarView
+        android:id="@+id/calendarViewFragment"
+        android:layout_width="326dp"
+        android:layout_height="410dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="42dp"
+        android:layout_marginBottom="211dp"
+        android:dateTextAppearance="@style/CalenderViewDateCustomText"
+        android:theme="@style/CalenderViewCustom"
+        android:weekDayTextAppearance="@style/CalenderViewWeekCustomText" />
+
+    <TextView
+        android:id="@+id/calendarTextView"
+        android:layout_width="157dp"
+        android:layout_height="48dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="130dp"
+        android:layout_marginEnd="124dp"
+        android:layout_marginBottom="115dp"
+        android:background="@color/white"
+        android:gravity="center"
+        android:text="9:30 AM - 10:30 PM"
+        android:textColor="#000000"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.824" />
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="90dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="73dp"
+        android:layout_marginBottom="-28dp"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/returnToScheduleButton"
+            android:layout_width="127dp"
+            android:layout_height="51dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="303dp"
+            android:layout_marginBottom="27dp"
+            android:text="Return"
+            android:textColor="#000000"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="653dp" />
+    </LinearLayout>
+
+
+</RelativeLayout>
