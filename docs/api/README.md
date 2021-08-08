@@ -4,7 +4,7 @@
 
 ---
 
-## GET /shifts
+## <u>function</u> : shifts
 > Returns an array of shifts assigned to the user.
 
 Security Rule: ```*authenticated* users.```
@@ -19,7 +19,7 @@ Security Rule: ```*authenticated* users.```
 
 * Note: If both **organization_id** and **schedule_id** are provided, the **<u>schedule_id</u>** will be used in favor.
 
-### Return result (200):
+### Return result (successful):
 
 response format: ```JSON```
 ```
@@ -36,9 +36,8 @@ response format: ```JSON```
     ]
 }
 ```
-
-## GET /hours_accumulated
-> Returns the aggregated sum of hours based off assigned shifts. Format of call is similar to ```GET /shifts```.
+## <u>function</u> : hoursAccumulated
+> Returns the aggregated sum of hours based off assigned shifts. Format of call is similar to ```shifts```.
 
 Security Rule: ```*authenticated* users.```
 
@@ -52,7 +51,7 @@ Security Rule: ```*authenticated* users.```
 
 * Note: If both **organization_id** and **schedule_id** are provided, the **<u>schedule_id</u>** will be used in favor.
 
-### Return result (200):
+### Return result (successful):
 
 response format: ```JSON```
 ```
@@ -61,7 +60,7 @@ response format: ```JSON```
 }
 ```
 
-## PUT /punch
+## <u>function</u> : punch
 > Worker client makes call when they punch in or out of a shift.
 
 Security Rule: ```*authenticated* users who belong to the organization.```
@@ -72,8 +71,8 @@ Security Rule: ```*authenticated* users who belong to the organization.```
 |organization_id*|ref: ```organization```|The organization that the user wishes to punch into.|
 |message|string|An optional message the worker can leave. May be useful to provide logs, such as excuses for tardiness.
 
-## PUT /break
-> Worker client makes call when they go on or off break. Only successful if worker is punched in after calling ```PUT /punch```.
+## <u>function</u> : break
+> Worker client makes call when they go on or off break. Only successful if worker is punched in after calling ```punch```.
 
 Security Rule: ```*authenticated* users who belong to the organization.```
 
@@ -83,7 +82,7 @@ Security Rule: ```*authenticated* users who belong to the organization.```
 |organization_id*|ref: ```organization```|The organization that user is currently working at.|
 |message|string|An optional message the worker can leave. May be useful to provide reason for break.
 
-## PUT /request_vacation
+## <u>function</u> : requestVacation
 > Worker client makes call when they request vacation time or time off. 
 
 Security Rule: ```*authenticated* users who belong to the organization.```
@@ -99,7 +98,7 @@ Security Rule: ```*authenticated* users who belong to the organization.```
 
 * <span style="color:#FF0000"><u>Validation Note:</u> The difference between [time_end - time_start] must fall within the organization's vacation time policy.</span>
 
-## PUT /request_cover
+## <u>function</u> : requestCover
 > Worker client makes call, requesting that another worker covers a specific shift.
 
 Security Rule: ```*authenticated* users who belong to the organization and are currently assigned to the referenced shift.```
