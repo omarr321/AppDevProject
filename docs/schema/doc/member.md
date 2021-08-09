@@ -20,9 +20,19 @@ Global Rules: ```Allow Read/Write for *authenticated* users where 'role=admin' o
 ---
 
 ### status enums:
+
+> On-duty status
+
 |Enum |Description |
 --- | ---
-|```active```|Member is currently working for the organization.|
+|```working```|Member is currently working a shift.|
+|```break```|Member is taking a break during a shift.|
+
+> Off-duty status
+
+|Enum |Description |
+ --- | ---
+|```active```|Member is working for the organization, but is not currently on duty.|
 |```hold```|Member's job is currently on hold.|
 |```leave```|Member is currently on leave.|
 |```terminated```|Member was terminated from organization.|
@@ -45,7 +55,7 @@ Global Rules: ```Allow Read/Write for *authenticated* users where 'role=admin' o
 |```owner```|Special role that inherits privilages to "manager".|
 |```admin```|Highest permission level for member. Such members with this role has full access to the organization and their schedules. For this doc page, the 'Security Rules' uses refer to the acess a member with this role has.|
 
-### occurence enums
+### occurrence enums:
 
 > Worker will recieve their salary based on the frequency selected below.
 
