@@ -111,8 +111,9 @@ public class ProfileFragment extends Fragment implements GoogleApiClient.OnConne
             userID.setText(account.getId());
         }
 
+        FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
         try{
-            Glide.with(getActivity()).load(account.getPhotoUrl()).into(profile);
+            Glide.with(getActivity()).load(mUser.getPhotoUrl()).into(profile);
         } catch(NullPointerException e){
             System.out.println(e);
             //Toast.makeText(getActivity(), "image not found", Toast.LENGTH_LONG).show();
