@@ -14,6 +14,14 @@ const TIME_WEEK = TIME_DAY*7;
 
 const MESSAGE_INTERNAL = "Something weird has occurred on our end! Please contact the developers to report a bug."
 
+const verifyUid = (context) => {
+    if (!context.auth) {
+        throw new functions.https.HttpsError('failed-precondition', 'The function must be called ' +
+            'while authenticated.')
+    }
+    return context.auth.uid;
+}
+
 const getShifts = async (uid, callback=(shift) => {}, time_start=new Date(), time_end = new Date(Date.now() + TIME_WEEK)) => {
     // TODO: Support optional references
     const user = await getUserDoc(uid);
@@ -48,11 +56,8 @@ exports.createUser = functions.auth.user().onCreate(async (user) => {
 
 // TODO: Add 11:59 to time_end
 exports.shifts = functions.https.onCall((async (data, context) => {
-    if (!context.auth) {
-        throw new functions.https.HttpsError('failed-precondition', 'The function must be called ' +
-            'while authenticated.')
-    }
-    const uid = context.auth.uid;
+
+    const uid = verifyUid(context);
 
     try {
         let results = [];
@@ -74,11 +79,8 @@ exports.shifts = functions.https.onCall((async (data, context) => {
 
 exports.hoursAccumulated = functions.https.onCall(( async (data, context) => {
     // TODO: Support optional references
-    if (!context.auth) {
-        throw new functions.https.HttpsError('failed-precondition', 'The function must be called ' +
-            'while authenticated.')
-    }
-    const uid = context.auth.uid;
+
+    const uid = verifyUid(context);
 
     try {
         let sum = 0;
