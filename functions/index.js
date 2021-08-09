@@ -46,6 +46,10 @@ exports.createUser = functions.auth.user().onCreate(async (user) => {
 
 // TODO: Add 11:59 to time_end
 exports.shifts = functions.https.onCall((async (data, context) => {
+    if (!context.auth) {
+        throw new functions.https.HttpsError('failed-precondition', 'The function must be called ' +
+            'while authenticated.')
+    }
     const uid = context.auth.uid;
 
     try {
@@ -64,6 +68,10 @@ exports.shifts = functions.https.onCall((async (data, context) => {
 
 exports.hoursAccumulated = functions.https.onCall(( async (data, context) => {
     // TODO: Support optional references
+    if (!context.auth) {
+        throw new functions.https.HttpsError('failed-precondition', 'The function must be called ' +
+            'while authenticated.')
+    }
     const uid = context.auth.uid;
 
     try {
