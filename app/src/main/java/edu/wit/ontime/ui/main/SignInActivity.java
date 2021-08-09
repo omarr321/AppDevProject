@@ -9,6 +9,8 @@ package edu.wit.ontime.ui.main;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -33,6 +35,8 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+
+import java.util.concurrent.Executor;
 
 /**
  * Demonstrate Firebase Authentication using a Google ID Token.
@@ -150,4 +154,9 @@ public class SignInActivity extends Activity {
     private void showResult(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
+
+
+
+
 }
+

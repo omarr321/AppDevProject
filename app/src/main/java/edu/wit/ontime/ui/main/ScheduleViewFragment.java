@@ -105,7 +105,6 @@ public class ScheduleViewFragment extends Fragment {
 
 
 
-
         addMessage(authTok)
                 .addOnCompleteListener(new OnCompleteListener<String>() {
                     @Override
@@ -134,16 +133,13 @@ public class ScheduleViewFragment extends Fragment {
     private Task<String> addMessage(String text) {
         // Create the arguments to the callable function.
 
-        return mFunctions
-                .getHttpsCallable("hoursAccumulated")
+
+        return mFunctions.getHttpsCallable("shifts")
                 .call(text)
-                .continueWith(new Continuation<HttpsCallableResult, String>() {
-                    @Override
-                    public String then(@NonNull Task<HttpsCallableResult> task) throws Exception {
-                        String result = (String) task.getResult().getData();
-                        //System.out.println(result);
-                        return result;
-                    }
+                .continueWith(task -> {
+                    //String result = (String) task.getResult().getData();
+                    System.out.println(task.getResult().getData());
+                    return (String) task.getResult().getData();
                 });
     }
 

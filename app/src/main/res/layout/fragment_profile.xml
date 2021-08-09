@@ -25,6 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:text="name"
+            android:textColor="#FFFFFF"
             android:textSize="20dp" />
 
         <TextView
@@ -33,6 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:text="email"
+            android:textColor="#FFFFFF"
             android:textSize="20dp" />
 
         <TextView
@@ -41,6 +43,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:text="id"
+            android:textColor="#FFFFFF"
             android:textSize="20dp" />
 
         <Button
