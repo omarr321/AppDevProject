@@ -12,11 +12,13 @@ const TIME_HOUR = 1000*60*60;
 const TIME_DAY = TIME_HOUR*24;
 const TIME_WEEK = TIME_DAY*7;
 
+const MESSAGE_INTERNAL = "Something weird has occurred on our end! Please contact the developers to report a bug."
+
 const getShifts = async (uid, callback=(shift) => {}, time_start=new Date(), time_end = new Date(Date.now() + TIME_WEEK)) => {
     // TODO: Support optional references
     const user = await getUserDoc(uid);
     if (user.empty) {
-        return {"error": "The current authentication session is invalid. Try to log-in again."}
+        throw new functions.https.HttpsError('not-found', "The user is not registered in the database. Please contact customer service to resolve this issue.")
     }
     await getUsersShifts(user.docs[0].ref, callback, time_start, time_end)
 }
@@ -61,8 +63,12 @@ exports.shifts = functions.https.onCall((async (data, context) => {
 
         return results;
     } catch (e) {
-        console.error(e);
-        return {error: e};
+        if (e instanceof functions.https.HttpsError) {
+            throw e;
+        } else {
+            console.error(e);
+            throw new functions.https.HttpsError('internal', MESSAGE_INTERNAL);
+        }
     }
 }))
 
@@ -84,8 +90,12 @@ exports.hoursAccumulated = functions.https.onCall(( async (data, context) => {
 
         return {total_hours: sum};
     } catch (e) {
-        console.error(e);
-        return {error: e};
+        if (e instanceof functions.https.HttpsError) {
+            throw e;
+        } else {
+            console.error(e);
+            throw new functions.https.HttpsError('internal', MESSAGE_INTERNAL);
+        }
     }
 }))
 
