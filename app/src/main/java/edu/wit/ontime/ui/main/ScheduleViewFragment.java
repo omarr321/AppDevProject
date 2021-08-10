@@ -47,10 +47,14 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
@@ -173,9 +177,15 @@ public class ScheduleViewFragment extends Fragment {
                                     Date[] shiftTimes = ShiftToDate((JSONObject) shiftsArr.get(i));
                                     Log.d("AAAA shift start", shiftTimes[0].toString());
                                     Log.d("AAAA shift end", shiftTimes[1].toString());
+
+                                    String startDateFormat;
+                                    String endDateFormat;
+                                    startDateFormat = FormatDateToString(shiftTimes[0].toString());
+                                    endDateFormat = FormatDateToString(shiftTimes[1].toString());
+                                    System.out.println(startDateFormat + " to " + endDateFormat);
                                 }
 
-                            } catch (JSONException e) {
+                            } catch (JSONException | ParseException e) {
                                 e.printStackTrace();
                             }
                         }
@@ -187,6 +197,23 @@ public class ScheduleViewFragment extends Fragment {
 
         return v;
     }
+
+    private String FormatDateToString(String shiftDate) throws ParseException {
+        DateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
+        Date date1 = dateFormat.parse(shiftDate);
+
+        Date date = null;
+        try {
+            date = new SimpleDateFormat("hhmm").parse(String.format("%04d", Integer.parseInt(date1.getHours() + "" + date1.getMinutes() + "0")));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a");
+
+        return date1.getDate() + " " + sdf.format(date);
+    }
+
+
     private Date[] ShiftToDate(JSONObject obj) throws JSONException {
         JSONObject shiftTime = obj.getJSONObject("time_start");
         Date shiftStart = new Date(shiftTime.getLong("_seconds")*1000);

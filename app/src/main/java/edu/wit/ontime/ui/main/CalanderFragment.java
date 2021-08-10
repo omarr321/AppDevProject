@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CalendarView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.activity.OnBackPressedCallback;
@@ -37,6 +39,7 @@ public class CalanderFragment extends Fragment {
     TextView changeDate;
     private FirebaseFunctions mFunctions;
     String authTok;
+    RelativeLayout layout;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.frahment_calander_view, container, false);
@@ -48,7 +51,11 @@ public class CalanderFragment extends Fragment {
         mFunctions = FirebaseFunctions.getInstance();
         authTok = FirebaseAuth.getInstance().getUid();
 
+        layout = v.findViewById(R.id.test321);
+
         view.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
+
+
             String  curDate = String.valueOf(dayOfMonth);
             String  Year = String.valueOf(year);
             String  Month = String.valueOf(month);
@@ -137,6 +144,8 @@ public class CalanderFragment extends Fragment {
         ScheduleViewFragment test = new ScheduleViewFragment();
 
 
+
+         layout.removeAllViewsInLayout();
          Bundle toSchView = new Bundle();
          Instant i = Instant.now();
          toSchView.putLong("startDate", i.toEpochMilli());
