@@ -24,7 +24,7 @@ const getUserMemberDocs = async (uid, callback = (members) => {
     return {user, members}
 }
 
-const getMemberFromOrgDoc = async (uid, organization) => {
+const getMemberFromOrgDoc = async (uid, organization_id) => {
     let member = null;
     const {user, members} = await getUserMemberDocs(uid);
 
