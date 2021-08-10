@@ -70,14 +70,80 @@ public class ScheduleViewFragment extends Fragment {
     private FirebaseFunctions mFunctions;
     private Date startDate;
     private Date endDate;
+    int yearR;
+    Calendar cal;
+    String authTok;
+    String monthR;
+    TextView year, month;
+    TextView day1Text,day2Text,day3Text,day4Text,day5Text,day6Text,day7Text,day1WH,day2WH,day3WH,day4WH,day5WH,day6WH, day7WH;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        Bundle temp = getArguments();
+
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        Bundle temp = getArguments();
         startDate = new Date(temp.getLong("startDate"));
-        Calendar cal = Calendar.getInstance();
+
+
+
+
+
+
+        View v = inflater.inflate(R.layout.fragment_schedule_view, container, false);
+        year = (TextView) v.findViewById(R.id.year);
+        month = (TextView) v.findViewById(R.id.month);
+
+        day1Text = (TextView) v.findViewById(R.id.dayOneText);
+        day1WH = (TextView) v.findViewById(R.id.dayOneWH);
+
+        day2Text = (TextView) v.findViewById(R.id.dayTwoText);
+        day2WH = (TextView) v.findViewById(R.id.dayTwoWH);
+
+        day3Text = (TextView) v.findViewById(R.id.dayThreeText);
+        day3WH = (TextView) v.findViewById(R.id.dayThreeWH);
+
+        day4Text = (TextView) v.findViewById(R.id.dayFourText);
+        day4WH = (TextView) v.findViewById(R.id.dayFourWH);
+
+        day5Text = (TextView) v.findViewById(R.id.dayFiveText);
+        day5WH = (TextView) v.findViewById(R.id.dayFiveWH);
+
+        day6Text = (TextView) v.findViewById(R.id.daySixText);
+        day6WH = (TextView) v.findViewById(R.id.daySixWH);
+
+        day7Text = (TextView) v.findViewById(R.id.daySevenText);
+        day7WH = (TextView) v.findViewById(R.id.daySevenWH);
+
+
+
+
+        //CollectionReference org = db.collection("organizations");
+
+        logout = v.findViewById(R.id.calendarView);
+        logout.setOnClickListener(logoutUser1);
+        Button prevWeekB = v.findViewById(R.id.prevWeek);
+        prevWeekB.setOnClickListener(prevWeek);
+        Button nextWeekB = v.findViewById(R.id.nextWeek);
+        nextWeekB.setOnClickListener(nextWeek);
+
+
+        formatChange(false, 0);
+
+
+
+
+
+        return v;
+    }
+
+    public void formatChange(boolean isAfter, long test){
+        if(isAfter){
+            startDate = new Date(test);
+        }
+
+        cal = Calendar.getInstance();
         cal.setTime(startDate);
         cal.set(Calendar.AM_PM, Calendar.AM);
         cal.set(Calendar.HOUR, 0);
@@ -92,8 +158,8 @@ public class ScheduleViewFragment extends Fragment {
 
         Log.d("AAAA Last Sunday", cal.getTime().toString());
 
-        int yearR = cal.get(Calendar.YEAR);
-        String monthR = Month.of(cal.get(Calendar.MONTH)+1).getDisplayName(TextStyle.FULL, Locale.getDefault());
+        yearR = cal.get(Calendar.YEAR);
+        monthR = Month.of(cal.get(Calendar.MONTH)+1).getDisplayName(TextStyle.FULL, Locale.getDefault());
 
         startDate = cal.getTime();
         cal.set(Calendar.AM_PM, Calendar.PM);
@@ -106,66 +172,18 @@ public class ScheduleViewFragment extends Fragment {
         Log.d("AAAA Next Saturday", cal.getTime().toString());
         endDate = cal.getTime();
 
-        View v = inflater.inflate(R.layout.fragment_schedule_view, container, false);
-        TextView year = (TextView) v.findViewById(R.id.year);
-        TextView month = (TextView) v.findViewById(R.id.month);
-
         year.setText(String.valueOf(yearR));
         month.setText(monthR);
 
-        TextView day1Text = (TextView) v.findViewById(R.id.dayOneText);
-        TextView day1WH = (TextView) v.findViewById(R.id.dayOneWH);
-
-        TextView day2Text = (TextView) v.findViewById(R.id.dayTwoText);
-        TextView day2WH = (TextView) v.findViewById(R.id.dayTwoWH);
-
-        TextView day3Text = (TextView) v.findViewById(R.id.dayThreeText);
-        TextView day3WH = (TextView) v.findViewById(R.id.dayThreeWH);
-
-        TextView day4Text = (TextView) v.findViewById(R.id.dayFourText);
-        TextView day4WH = (TextView) v.findViewById(R.id.dayFourWH);
-
-        TextView day5Text = (TextView) v.findViewById(R.id.dayFiveText);
-        TextView day5WH = (TextView) v.findViewById(R.id.dayFiveWH);
-
-        TextView day6Text = (TextView) v.findViewById(R.id.daySixText);
-        TextView day6WH = (TextView) v.findViewById(R.id.daySixWH);
-
-        TextView day7Text = (TextView) v.findViewById(R.id.daySevenText);
-        TextView day7WH = (TextView) v.findViewById(R.id.daySevenWH);
-
-        CollectionReference users = db.collection("users");
-        String authTok = FirebaseAuth.getInstance().getUid();
-        Log.d("Token", authTok);
-        users
-                .whereEqualTo("auth_id", authTok)
-        .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d("User", document.getId() + " => " + document.getData());
-                            }
-                        } else {
-                            Log.d("User", "Error getting documents: ", task.getException());
-                        }
-                    }
-                });
-
-        CollectionReference org = db.collection("organizations");
-
-        logout = v.findViewById(R.id.calendarView);
-        logout.setOnClickListener(logoutUser1);
-        Button prevWeekB = v.findViewById(R.id.prevWeek);
-        prevWeekB.setOnClickListener(prevWeek);
-        Button nextWeekB = v.findViewById(R.id.nextWeek);
-        nextWeekB.setOnClickListener(nextWeek);
+        authTok = FirebaseAuth.getInstance().getUid();
 
         mFunctions = FirebaseFunctions.getInstance();
+        changeDate();
+
+    }
 
 
-
+    public void changeDate(){
         addMessage(authTok)
                 .addOnCompleteListener(new OnCompleteListener<String>() {
                     @Override
@@ -284,9 +302,6 @@ public class ScheduleViewFragment extends Fragment {
                         // ...
                     }
                 });
-
-
-        return v;
     }
 
     private String FormatDateToString(Date shiftDate){
@@ -356,46 +371,18 @@ public class ScheduleViewFragment extends Fragment {
         trans.replace(R.id.test123, test);
         trans.commit();
 
-        /**
-        final Dialog fbDialogue = new Dialog(getActivity(), android.R.style.Theme_Black_NoTitleBar);
-        //fbDialogue.getWindow().setBackgroundDrawable(new ColorDrawable(Color.argb(100, 0, 0, 0)));
-        fbDialogue.setContentView(R.layout.frahment_calander_view);
-        fbDialogue.setCancelable(true);
-        fbDialogue.show();
-         */
     };
 
     private  View.OnClickListener prevWeek = v -> {
-        ScheduleViewFragment lastWeek = new ScheduleViewFragment();
-        Bundle toSchView = new Bundle();
-        Calendar cal = Calendar.getInstance();
         cal.setTime(startDate);
         cal.add(Calendar.DAY_OF_WEEK, -7);
+        formatChange(true,cal.getTime().getTime());
 
-        Instant i = Instant.now();
-        toSchView.putLong("startDate", cal.getTime().getTime());
-        lastWeek.setArguments(toSchView);
-
-        FragmentManager manager = getChildFragmentManager();
-        FragmentTransaction trans = manager.beginTransaction();
-        trans.replace(R.id.test123, lastWeek);
-        trans.commit();
     };
 
     private  View.OnClickListener nextWeek = v -> {
-        ScheduleViewFragment nextWeek = new ScheduleViewFragment();
-        Bundle toSchView = new Bundle();
-        Calendar cal = Calendar.getInstance();
         cal.setTime(startDate);
-        cal.add(Calendar.DAY_OF_WEEK, 7);
-
-        Instant i = Instant.now();
-        toSchView.putLong("startDate", cal.getTime().getTime());
-        nextWeek.setArguments(toSchView);
-
-        FragmentManager manager = getChildFragmentManager();
-        FragmentTransaction trans = manager.beginTransaction();
-        trans.replace(R.id.test123, nextWeek);
-        trans.commit();
+        cal.add(Calendar.DAY_OF_WEEK,7);
+        formatChange(true,cal.getTime().getTime());
     };
 }
