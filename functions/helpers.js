@@ -47,8 +47,6 @@ const getMemberFromOrgDoc = async (uid, organization_id) => {
 const getUserShifts = async (uid, callback = (shift) => {
 }, time_start = new Date(), time_end = new Date(Date.now() + TIME_WEEK)) => {
     // TODO: Support optional references
-    console.log(time_start)
-    console.log(time_end)
     const user = await getUser(uid);
     await getUsersShifts(user, callback, time_start, time_end);
 }
