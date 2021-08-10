@@ -42,6 +42,7 @@ public class HomeFragment extends Fragment {
     private Date startDate;
     private TextView time;
     private TextView schedule;
+    private int hours = 0;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -58,6 +59,10 @@ public class HomeFragment extends Fragment {
 
         mFunctions = FirebaseFunctions.getInstance();
 
+
+
+
+
         String authTok = FirebaseAuth.getInstance().getUid();
         getCurrShift(authTok)
                 .addOnCompleteListener(new OnCompleteListener<String>() {
@@ -72,7 +77,7 @@ public class HomeFragment extends Fragment {
                             }
                             Log.d("HOME Object Details", e.toString());
                         }else{
-                            Log.d("HOME dataGotten", task.getResult());
+                            Log.d("HOME dataGotten Shifts", task.getResult());
                             try {
                                 int shiftCount = 0;
                                 JSONArray temp = new JSONArray(task.getResult());
@@ -98,6 +103,66 @@ public class HomeFragment extends Fragment {
                                     Log.d("HOME formatted str", "No Shift");
                                     schedule.setText("No Shift");
                                 }
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        // ...
+                    }
+                });
+
+        getHourAccrued(authTok)
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        if (!task.isSuccessful()) {
+                            Exception e = task.getException();
+                            if (e instanceof FirebaseFunctionsException) {
+                                FirebaseFunctionsException ffe = (FirebaseFunctionsException) e;
+                                FirebaseFunctionsException.Code code = ffe.getCode();
+                                Object details = ffe.getDetails();
+                            }
+                            Log.d("HOME Object Details", e.toString());
+                        }else{
+                            try {
+                                JSONObject totalHour = new JSONObject(task.getResult());
+                                hours = totalHour.getInt("total_hours");
+                                Log.d("HOME Total Hours", String.valueOf(hours));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        // ...
+                    }
+                });
+
+        getOrg(authTok)
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        if (!task.isSuccessful()) {
+                            Exception e = task.getException();
+                            if (e instanceof FirebaseFunctionsException) {
+                                FirebaseFunctionsException ffe = (FirebaseFunctionsException) e;
+                                FirebaseFunctionsException.Code code = ffe.getCode();
+                                Object details = ffe.getDetails();
+                            }
+                            Log.d("HOME Object Details", e.toString());
+                        }else{
+                            //Log.d("HOME dataGotten Org", task.getResult());
+                            try{
+                                JSONArray temp = new JSONArray(task.getResult());
+                                JSONObject org = (JSONObject) temp.get(0);
+                                Log.d("HOME Org Data", org.toString());
+
+                                JSONObject member = (JSONObject) org.get("member");
+                                Log.d("HOME Member Data", member.toString());
+
+                                JSONObject pay = (JSONObject) member.get("pay");
+                                Log.d("HOME Pay Data", pay.toString());
 
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -158,65 +223,16 @@ public class HomeFragment extends Fragment {
                 });
     }
 
-    private Task<String> gethoursAcum(String text) {
-        Map<String, Object> data = new HashMap<>();
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(startDate);
-        cal.set(Calendar.DAY_OF_WEEK, -1);
-        cal.set(Calendar.HOUR, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MILLISECOND, 0);
-
-        data.put("time_start", cal.getTime().getTime());
-
-        cal.set(Calendar.HOUR, 23);
-        cal.set(Calendar.MINUTE, 59);
-        cal.set(Calendar.SECOND, 59);
-        cal.set(Calendar.MILLISECOND, 999);
-        data.put("time_end", cal.getTime().getTime());
-
-        //System.out.println(startDate.getTime() + "Here!!! - home");
-
-
-        return mFunctions.getHttpsCallable("hoursAccumulated")
-                .call(data)
-                .continueWith(task -> {
-                    Gson g = new Gson();
-                    return g.toJson(task.getResult().getData());
-                });
-    }
-
-    private Task<String> getPay(String text) {
-        Map<String, Object> data = new HashMap<>();
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(startDate);
-        cal.set(Calendar.DAY_OF_WEEK, -1);
-        cal.set(Calendar.HOUR, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MILLISECOND, 0);
-
-        data.put("time_start", cal.getTime().getTime());
-
-        cal.set(Calendar.HOUR, 23);
-        cal.set(Calendar.MINUTE, 59);
-        cal.set(Calendar.SECOND, 59);
-        cal.set(Calendar.MILLISECOND, 999);
-        data.put("time_end", cal.getTime().getTime());
-
-        //System.out.println(startDate.getTime() + "Here!!! - home");
-
-
-        return mFunctions.getHttpsCallable("hoursAccumulated")
-                .call(data)
-                .continueWith(task -> {
-                    Gson g = new Gson();
-                    return g.toJson(task.getResult().getData());
-                });
-    }
-
     private Task<String> getOrg(String text) {
+        return mFunctions.getHttpsCallable("getOrganizations")
+                .call()
+                .continueWith(task -> {
+                    Gson g = new Gson();
+                    return g.toJson(task.getResult().getData());
+                });
+    }
+
+    private Task<String> getHourAccrued(String text) {
         Map<String, Object> data = new HashMap<>();
         Calendar cal = Calendar.getInstance();
         cal.setTime(startDate);
@@ -233,9 +249,6 @@ public class HomeFragment extends Fragment {
         cal.set(Calendar.SECOND, 59);
         cal.set(Calendar.MILLISECOND, 999);
         data.put("time_end", cal.getTime().getTime());
-
-        //System.out.println(startDate.getTime() + "Here!!! - home");
-
 
         return mFunctions.getHttpsCallable("hoursAccumulated")
                 .call(data)
