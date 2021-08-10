@@ -6,7 +6,7 @@ admin.initializeApp()
 const db = admin.firestore();
 
 // Import helper methods
-const {getUserDoc, getUsersShifts} = require("./queries");
+const {getUserDoc, getUsersShifts, getMemberDocs} = require("./queries");
 
 const TIME_HOUR = 1000*60*60;
 const TIME_DAY = TIME_HOUR*24;
@@ -22,13 +22,24 @@ const verifyUid = (context) => {
     return context.auth.uid;
 }
 
-const getShifts = async (uid, callback=(shift) => {}, time_start=new Date(), time_end = new Date(Date.now() + TIME_WEEK)) => {
-    // TODO: Support optional references
+const getUser = async (uid) => {
     const user = await getUserDoc(uid);
     if (user.empty) {
         throw new functions.https.HttpsError('not-found', "The user is not registered in the database. Please contact customer service to resolve this issue.")
     }
-    await getUsersShifts(user.docs[0].ref, callback, time_start, time_end)
+    return user.docs[0].ref;
+}
+
+const getUserMemberDocs = async (uid, callback=(shift) => {}) => {
+    return await getMemberDocs(await getUser(uid));
+}
+
+const getUserShifts = async (uid, callback=(shift) => {}, time_start=new Date(), time_end = new Date(Date.now() + TIME_WEEK)) => {
+    // TODO: Support optional references
+    console.log(time_start)
+    console.log(time_end)
+    const user = await getUser(uid);
+    await getUsersShifts(user, callback, time_start, time_end);
 }
 
 exports.createUser = functions.auth.user().onCreate(async (user) => {
@@ -66,7 +77,7 @@ exports.shifts = functions.https.onCall((async (data, context) => {
     try {
         let results = [];
 
-        await getShifts(uid, (shift) => {
+        await getUserShifts(uid, (shift) => {
             results = results.concat(shift.data());
         }, time_start, time_end);
 
@@ -82,7 +93,6 @@ exports.shifts = functions.https.onCall((async (data, context) => {
 }))
 
 exports.hoursAccumulated = functions.https.onCall(( async (data, context) => {
-    // TODO: Support optional references
 
     const uid = verifyUid(context);
 
@@ -93,7 +103,7 @@ exports.hoursAccumulated = functions.https.onCall(( async (data, context) => {
     try {
         let sum = 0;
 
-        await getShifts(uid, (shift) => {
+        await getUserShifts(uid, (shift) => {
             const data = shift.data();
             sum = sum + new Date(data.time_end - data.time_start).getTime() / (60*60);
         }, time_start, time_end);
