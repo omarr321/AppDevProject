@@ -1,11 +1,13 @@
 package edu.wit.ontime.ui.main;
 
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.text.DateFormat;
@@ -20,6 +22,7 @@ import java.util.Map;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -44,11 +47,33 @@ public class HomeFragment extends Fragment {
     private TextView time;
     private TextView schedule;
     private int hours = 0;
+    private Button punchIn, punchOut, onBreak, offBreak;
+    private TextView statusText;
+    private JSONObject member;
+    private String status = " ";
+    private int yellow, blue, green, light_green;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_main, container, false);
+
+        yellow = ResourcesCompat.getColor(getResources(), R.color.yellow, null);
+        blue = ResourcesCompat.getColor(getResources(), R.color.teal_700, null);
+        green = ResourcesCompat.getColor(getResources(), R.color.green, null);
+        light_green = ResourcesCompat.getColor(getResources(), R.color.light_green, null);
+
+        punchIn = v.findViewById(R.id.punchIn);
+        punchOut = v.findViewById(R.id.punchOut);
+        onBreak = v.findViewById(R.id.onBreak);
+        offBreak = v.findViewById(R.id.offBreak);
+
+        punchIn.setVisibility(View.GONE);
+        punchOut.setVisibility(View.GONE);
+        onBreak.setVisibility(View.GONE);
+        offBreak.setVisibility(View.GONE);
+
+        statusText = v.findViewById(R.id.statusText);
 
         Instant i = Instant.now();
         startDate = new Date(i.toEpochMilli());
@@ -154,11 +179,14 @@ public class HomeFragment extends Fragment {
                                             }else{
                                                 try{
                                                     JSONArray temp = new JSONArray(task.getResult());
+
                                                     JSONObject org = (JSONObject) temp.get(0);
+
                                                     Log.d("HOME Org Data", org.toString());
 
-                                                    JSONObject member = (JSONObject) org.get("member");
+                                                    member = (JSONObject) org.get("member");
                                                     Log.d("HOME Member Data", member.toString());
+                                                    updateStatus();
 
                                                     JSONObject pay = (JSONObject) member.get("pay");
                                                     Log.d("HOME Pay Data", pay.toString());
@@ -189,7 +217,143 @@ public class HomeFragment extends Fragment {
                     }
                 });
 
+        punchIn.setOnClickListener(pi -> {
+            status = "working";
+            punch(authTok)
+                    .addOnCompleteListener(new OnCompleteListener<String>() {
+                        @Override
+                        public void onComplete(@NonNull Task<String> task) {
+                            if (!task.isSuccessful()) {
+                                Exception e = task.getException();
+                                if (e instanceof FirebaseFunctionsException) {
+                                    FirebaseFunctionsException ffe = (FirebaseFunctionsException) e;
+                                    FirebaseFunctionsException.Code code = ffe.getCode();
+                                    Object details = ffe.getDetails();
+                                }
+                                Log.d("HOME Object Details", e.toString());
+                            }else{
+
+                            }
+                        }
+                    });
+            updateStatus();
+        });
+
+        punchOut.setOnClickListener(po -> {
+            status = "active";
+            punch(authTok)
+                    .addOnCompleteListener(new OnCompleteListener<String>() {
+                        @Override
+                        public void onComplete(@NonNull Task<String> task) {
+                            if (!task.isSuccessful()) {
+                                Exception e = task.getException();
+                                if (e instanceof FirebaseFunctionsException) {
+                                    FirebaseFunctionsException ffe = (FirebaseFunctionsException) e;
+                                    FirebaseFunctionsException.Code code = ffe.getCode();
+                                    Object details = ffe.getDetails();
+                                }
+                                Log.d("HOME Object Details", e.toString());
+                            }else{
+
+                            }
+                        }
+                    });
+            updateStatus();
+        });
+
+        onBreak.setOnClickListener(ob -> {
+            status = "break";
+            pbreak(authTok)
+                    .addOnCompleteListener(new OnCompleteListener<String>() {
+                        @Override
+                        public void onComplete(@NonNull Task<String> task) {
+                            if (!task.isSuccessful()) {
+                                Exception e = task.getException();
+                                if (e instanceof FirebaseFunctionsException) {
+                                    FirebaseFunctionsException ffe = (FirebaseFunctionsException) e;
+                                    FirebaseFunctionsException.Code code = ffe.getCode();
+                                    Object details = ffe.getDetails();
+                                }
+                                Log.d("HOME Object Details", e.toString());
+                            }else{
+
+                            }
+                        }
+                    });
+            updateStatus();
+        });
+
+        offBreak.setOnClickListener(ofb -> {
+            status = "working";
+            pbreak(authTok)
+                    .addOnCompleteListener(new OnCompleteListener<String>() {
+                        @Override
+                        public void onComplete(@NonNull Task<String> task) {
+                            if (!task.isSuccessful()) {
+                                Exception e = task.getException();
+                                if (e instanceof FirebaseFunctionsException) {
+                                    FirebaseFunctionsException ffe = (FirebaseFunctionsException) e;
+                                    FirebaseFunctionsException.Code code = ffe.getCode();
+                                    Object details = ffe.getDetails();
+                                }
+                                Log.d("HOME Object Details", e.toString());
+                            }else{
+
+                            }
+                        }
+                    });
+            updateStatus();
+        });
+
         return v;
+    }
+
+    private void updateStatus() {
+        if (status.equals(" ")) {
+            try {
+                status = member.getString("status");
+                Log.d("HOME status", status);
+
+            } catch (JSONException e) {
+                Log.d("HOME ERROR", "Error getting Status!");
+                e.printStackTrace();
+            }
+        }
+
+        switch (status){
+            case "active":
+                punchIn.setVisibility(View.VISIBLE);
+                punchOut.setVisibility(View.GONE);
+                onBreak.setVisibility(View.GONE);
+                offBreak.setVisibility(View.GONE);
+                if (schedule.getText().equals("No Shift")) {
+                    statusText.setText("DAY OFF");
+                    statusText.setBackgroundColor(blue);
+                } else {
+                    statusText.setText("PUNCHED OUT");
+                    statusText.setBackgroundColor(yellow);
+                }
+                break;
+            case "working":
+                punchIn.setVisibility(View.GONE);
+                punchOut.setVisibility(View.VISIBLE);
+                onBreak.setVisibility(View.VISIBLE);
+                offBreak.setVisibility(View.GONE);
+                statusText.setText("PUNCHED IN");
+                statusText.setBackgroundColor(green);
+                break;
+            case "break":
+                punchIn.setVisibility(View.GONE);
+                punchOut.setVisibility(View.GONE);
+                onBreak.setVisibility(View.GONE);
+                offBreak.setVisibility(View.VISIBLE);
+                statusText.setText("ON BREAK");
+                statusText.setBackgroundColor(light_green);
+                break;
+            default:
+                System.out.println("Error: Invalid Status!");
+                System.exit(-1);
+        }
     }
 
     private String FormatDateToString(Date shiftDate){
@@ -207,6 +371,24 @@ public class HomeFragment extends Fragment {
         return temp;
     }
 
+
+    private Task<String> punch(String text) {
+        return mFunctions.getHttpsCallable("punch")
+                .call()
+                .continueWith(task -> {
+                    Gson g = new Gson();
+                    return g.toJson(task.getResult().getData());
+                });
+    }
+
+    private Task<String> pbreak(String text) {
+        return mFunctions.getHttpsCallable("break")
+                .call()
+                .continueWith(task -> {
+                    Gson g = new Gson();
+                    return g.toJson(task.getResult().getData());
+                });
+    }
 
     private Task<String> getCurrShift(String text) {
         Map<String, Object> data = new HashMap<>();
