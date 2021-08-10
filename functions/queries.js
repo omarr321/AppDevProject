@@ -17,3 +17,7 @@ exports.getUsersShifts = async (userRef, callback, time_start, time_end) => {
         .orderBy("time_start", "asc")
         .get()).forEach(callback);
 }
+
+exports.getShiftDocs = async (shiftUUID) => {
+    return await db.collectionGroup('shifts').where('uuid', '==', shiftUUID).get();
+}

@@ -14,7 +14,7 @@ const MESSAGE_INTERNAL = "Something weird has occurred on our end! Please contac
 const {
     verifyUid,
     getUserShifts,
-    getMemberFromOrgDoc
+    getMemberFromOrgDoc, getShift
 } = require("./helpers");
 
 exports.createUser = functions.auth.user().onCreate(async (user) => {

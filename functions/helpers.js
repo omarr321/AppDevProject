@@ -1,5 +1,5 @@
 const functions = require("firebase-functions");
-const {getUserDoc, getMemberDocs, getUsersShifts} = require("./queries");
+const {getUserDoc, getMemberDocs, getUsersShifts, getShiftDocs} = require("./queries");
 
 const verifyUid = (context) => {
     if (!context.auth) {
@@ -53,10 +53,19 @@ const getUserShifts = async (uid, callback = (shift) => {
     await getUsersShifts(user, callback, time_start, time_end);
 }
 
+const getShift = async (shiftUUID) => {
+    const shifts = await getShiftDocs(shiftUUID);
+    if (shifts.empty) {
+        throw new functions.https.HttpsError('not-found', "The shift does not exist.")
+    }
+    return shifts.docs[0].ref;
+}
+
 module.exports = {
     verifyUid,
     getUser,
     getUserMemberDocs,
     getMemberFromOrgDoc,
-    getUserShifts
+    getUserShifts,
+    getShift
 }
