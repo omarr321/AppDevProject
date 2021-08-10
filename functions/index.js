@@ -173,10 +173,109 @@ exports.break = functions.https.onCall((async (data, context) => {
     }
 }))
 
-exports.requestVacation = functions.https.onCall(((data, context) => {
-    return "Work in progress..."
+exports.requestVacation = functions.https.onCall((async (data, context) => {
+
+    const {organization_id, time_start, time_end, message = ""} = data;
+    const uid = verifyUid(context);
+
+    // Validators
+    let missing_args = []
+
+    if (organization_id == null){
+        missing_args = missing_args.concat("organization_id");
+    }
+    if (time_start == null){
+        missing_args = missing_args.concat("time_start");
+    }
+    if (time_end == null){
+        missing_args = missing_args.concat("time_end");
+    }
+    if (missing_args.length > 0){
+        throw new functions.https.HttpsError("invalid-argument", `The parameters [${missing_args.toString()}] are required but not provided.`);
+    }
+
+    try {
+        // Get organization of member
+        const {member} = await getMemberFromOrgDoc(uid, organization_id);
+        const org = member.parent.parent;
+
+        const payload = {
+            time_submitted: new Date(Date.now()),
+            sender: member,
+            request_type: "vacation",
+            time_start: time_start,
+            time_end: time_end,
+            message: message
+        }
+
+        // Add a 'vacation' request to the requests collection;
+        const request = await org.collection("requests").add(payload)
+
+        return {
+            successful: true,
+            payload: payload
+        };
+
+    } catch (e) {
+        if (e instanceof functions.https.HttpsError) {
+            throw e;
+        } else {
+            console.error(e);
+            throw new functions.https.HttpsError('internal', MESSAGE_INTERNAL);
+        }
+    }
 }))
 
-exports.requestCover = functions.https.onCall(((data, context) => {
-    return "Work in progress..."
+exports.requestCover = functions.https.onCall((async (data, context) => {
+
+    const {shift_uuid, message = ""} = data;
+    const uid = verifyUid(context);
+
+    // Validators
+    let missing_args = []
+
+    if (shift_uuid == null){
+        missing_args = missing_args.concat("shift_uuid");
+    }
+    if (missing_args.length > 0){
+        throw new functions.https.HttpsError("invalid-argument", `The parameters [${missing_args.toString()}] are required but not provided.`);
+    }
+
+    try {
+        // Get shift provided
+        const shift = await getShift(shift_uuid);
+
+        const org = shift.parent.parent.parent.parent;
+
+        // Validate that shift is already assigned to user
+        const shiftSnap = await shift.get();
+        const {user, member} = await getMemberFromOrgDoc(uid, org.id);
+        if(!user.isEqual(shiftSnap.data().assignee)) {
+            throw new functions.https.HttpsError("permission-denied", "The user is currently not assigned that shift.");
+        }
+
+        const payload = {
+            time_submitted: new Date(Date.now()),
+            sender: member,
+            request_type: "cover",
+            shift: shift,
+            message: message
+        }
+
+        // Add a 'cover' request to the requests collection;
+        const request = await org.collection("requests").add(payload)
+
+        return {
+            successful: true,
+            payload: payload
+        };
+
+    } catch (e) {
+        if (e instanceof functions.https.HttpsError) {
+            throw e;
+        } else {
+            console.error(e);
+            throw new functions.https.HttpsError('internal', MESSAGE_INTERNAL);
+        }
+    }
 }))
