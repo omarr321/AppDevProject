@@ -1,11 +1,13 @@
 package edu.wit.ontime;
 
+import android.os.Build;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     public static ViewPager viewPager;
     SectionsPagerAdapter sectionsPagerAdapter;
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
          */
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void openNewContentFragment(String test) {
         HostedFragmentTest hostFragment = (HostedFragmentTest) sectionsPagerAdapter.getItem(viewPager.getCurrentItem());
         hostFragment.replaceFragment(CalanderFragment.newInstance(test), true);

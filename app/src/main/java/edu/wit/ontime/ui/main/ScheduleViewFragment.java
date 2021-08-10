@@ -3,6 +3,7 @@ package edu.wit.ontime.ui.main;
 import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.icu.util.ULocale;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,6 +21,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -50,6 +53,10 @@ import java.net.URL;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
+import java.time.Instant;
+import java.time.Month;
+import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -84,6 +91,10 @@ public class ScheduleViewFragment extends Fragment {
         }
 
         Log.d("AAAA Last Sunday", cal.getTime().toString());
+
+        int yearR = cal.get(Calendar.YEAR);
+        String monthR = Month.of(cal.get(Calendar.MONTH)+1).getDisplayName(TextStyle.FULL, Locale.getDefault());
+
         startDate = cal.getTime();
         cal.set(Calendar.AM_PM, Calendar.PM);
         cal.set(Calendar.HOUR, 11);
@@ -99,6 +110,8 @@ public class ScheduleViewFragment extends Fragment {
         TextView year = (TextView) v.findViewById(R.id.year);
         TextView month = (TextView) v.findViewById(R.id.month);
 
+        year.setText(String.valueOf(yearR));
+        month.setText(monthR);
 
         TextView day1Text = (TextView) v.findViewById(R.id.dayOneText);
         TextView day1WH = (TextView) v.findViewById(R.id.dayOneWH);
@@ -120,8 +133,6 @@ public class ScheduleViewFragment extends Fragment {
 
         TextView day7Text = (TextView) v.findViewById(R.id.daySevenText);
         TextView day7WH = (TextView) v.findViewById(R.id.daySevenWH);
-
-
 
         CollectionReference users = db.collection("users");
         String authTok = FirebaseAuth.getInstance().getUid();
@@ -146,6 +157,10 @@ public class ScheduleViewFragment extends Fragment {
 
         logout = v.findViewById(R.id.calendarView);
         logout.setOnClickListener(logoutUser1);
+        Button prevWeekB = v.findViewById(R.id.prevWeek);
+        prevWeekB.setOnClickListener(prevWeek);
+        Button nextWeekB = v.findViewById(R.id.nextWeek);
+        nextWeekB.setOnClickListener(nextWeek);
 
         mFunctions = FirebaseFunctions.getInstance();
 
@@ -162,30 +177,106 @@ public class ScheduleViewFragment extends Fragment {
                                 FirebaseFunctionsException.Code code = ffe.getCode();
                                 Object details = ffe.getDetails();
                             }
-                            Log.d("AAAA Object Details", e.toString());
+                            Log.d("SCHEDULE Object Details", e.toString());
                         }else{
-                            Log.d("AAAA dataGotten", task.getResult());
+                            Log.d("SCHEDULE dataGotten", task.getResult());
                             try {
                                 int shiftCount = 0;
+                                int yearR = 0;
+                                int monthR = 0;
                                 JSONArray temp = new JSONArray(task.getResult());
                                 JSONArray shiftsArr = new JSONArray();
                                 for (int i = 0; i < temp.length(); i++) {
                                     shiftsArr.put(temp.get(i));
                                 }
+                                String[] shiftsStr = {" "," "," "," "," "," "," "};
                                 for (int i = 0; i < shiftsArr.length(); i++) {
-                                    Log.d("AAAA shift" + i, shiftsArr.get(i).toString());
+                                    Log.d("SCHEDULE shift " + (i+1), shiftsArr.get(i).toString());
                                     Date[] shiftTimes = ShiftToDate((JSONObject) shiftsArr.get(i));
-                                    Log.d("AAAA shift start", shiftTimes[0].toString());
-                                    Log.d("AAAA shift end", shiftTimes[1].toString());
+                                    Log.d("SCHEDULE shift start", shiftTimes[0].toString());
+                                    Log.d("SCHEDULE shift end", shiftTimes[1].toString());
 
                                     String startDateFormat;
                                     String endDateFormat;
-                                    startDateFormat = FormatDateToString(shiftTimes[0].toString());
-                                    endDateFormat = FormatDateToString(shiftTimes[1].toString());
-                                    System.out.println(startDateFormat + " to " + endDateFormat);
+                                    startDateFormat = FormatDateToString(shiftTimes[0]);
+                                    endDateFormat = FormatDateToString(shiftTimes[1]);
+                                    Log.d("SCHEDULE formatted str",startDateFormat + " - " + endDateFormat);
+                                    Calendar cal = Calendar.getInstance();
+                                    cal.setTime(shiftTimes[0]);
+                                    int day = cal.get(Calendar.DAY_OF_WEEK);
+                                    shiftsStr[day-1] = startDateFormat + " - " + endDateFormat;
                                 }
 
-                            } catch (JSONException | ParseException e) {
+                                for (int i = 0; i < shiftsStr.length; i++) {
+                                    Log.d("AAAA DAY " + (i+1), shiftsStr[i]);
+                                }
+                                cal.setTime(startDate);
+                                String spacer = ", ";
+                                String ext = "th: ";
+
+                                DayOfWeek.of(1).getDisplayName(TextStyle.SHORT, Locale.getDefault());
+                                day1Text.setText(DayOfWeek.of(cal.get(Calendar.DAY_OF_WEEK)+6).getDisplayName(TextStyle.SHORT, Locale.getDefault()) + spacer + (cal.get(Calendar.DAY_OF_MONTH)) + ext);
+                                if (shiftsStr[0].equals(" ")) {
+                                    day1WH.setText("No Shift");
+                                } else {
+                                    day1WH.setText(shiftsStr[0]);
+                                }
+
+                                cal.add(Calendar.DAY_OF_WEEK, 1);
+                                DayOfWeek.of(1).getDisplayName(TextStyle.SHORT, Locale.getDefault());
+                                day2Text.setText(DayOfWeek.of((cal.get(Calendar.DAY_OF_WEEK)+6)%7).getDisplayName(TextStyle.SHORT, Locale.getDefault()) + spacer + (cal.get(Calendar.DAY_OF_MONTH)) + ext);
+                                if (shiftsStr[1].equals(" ")) {
+                                    day2WH.setText("No Shift");
+                                } else {
+                                    day2WH.setText(shiftsStr[1]);
+                                }
+
+                                cal.add(Calendar.DAY_OF_WEEK, 1);
+                                DayOfWeek.of(1).getDisplayName(TextStyle.SHORT, Locale.getDefault());
+                                day3Text.setText(DayOfWeek.of((cal.get(Calendar.DAY_OF_WEEK)+6)%7).getDisplayName(TextStyle.SHORT, Locale.getDefault()) + spacer + (cal.get(Calendar.DAY_OF_MONTH)) + ext);
+                                if (shiftsStr[2].equals(" ")) {
+                                    day3WH.setText("No Shift");
+                                } else {
+                                    day3WH.setText(shiftsStr[2]);
+                                }
+
+                                cal.add(Calendar.DAY_OF_WEEK, 1);
+                                DayOfWeek.of(1).getDisplayName(TextStyle.SHORT, Locale.getDefault());
+                                day4Text.setText(DayOfWeek.of((cal.get(Calendar.DAY_OF_WEEK)+6)%7).getDisplayName(TextStyle.SHORT, Locale.getDefault()) + spacer + (cal.get(Calendar.DAY_OF_MONTH)) + ext);
+                                if (shiftsStr[3].equals(" ")) {
+                                    day4WH.setText("No Shift");
+                                } else {
+                                    day4WH.setText(shiftsStr[3]);
+                                }
+
+                                cal.add(Calendar.DAY_OF_WEEK, 1);
+                                DayOfWeek.of(1).getDisplayName(TextStyle.SHORT, Locale.getDefault());
+                                day5Text.setText(DayOfWeek.of((cal.get(Calendar.DAY_OF_WEEK)+6)%7).getDisplayName(TextStyle.SHORT, Locale.getDefault()) + spacer + (cal.get(Calendar.DAY_OF_MONTH)) + ext);
+                                if (shiftsStr[4].equals(" ")) {
+                                    day5WH.setText("No Shift");
+                                } else {
+                                    day5WH.setText(shiftsStr[4]);
+                                }
+
+                                cal.add(Calendar.DAY_OF_WEEK, 1);
+                                DayOfWeek.of(1).getDisplayName(TextStyle.SHORT, Locale.getDefault());
+                                day6Text.setText(DayOfWeek.of((cal.get(Calendar.DAY_OF_WEEK)+6)%7).getDisplayName(TextStyle.SHORT, Locale.getDefault()) + spacer + (cal.get(Calendar.DAY_OF_MONTH)) + ext);
+                                if (shiftsStr[5].equals(" ")) {
+                                    day6WH.setText("No Shift");
+                                } else {
+                                    day6WH.setText(shiftsStr[5]);
+                                }
+
+                                cal.add(Calendar.DAY_OF_WEEK, 1);
+                                DayOfWeek.of(1).getDisplayName(TextStyle.SHORT, Locale.getDefault());
+                                day7Text.setText(DayOfWeek.of((cal.get(Calendar.DAY_OF_WEEK)+6)%7).getDisplayName(TextStyle.SHORT, Locale.getDefault()) + spacer + (cal.get(Calendar.DAY_OF_MONTH)) + ext);
+                                if (shiftsStr[6].equals(" ")) {
+                                    day7WH.setText("No Shift");
+                                } else {
+                                    day7WH.setText(shiftsStr[6]);
+                                }
+
+                            } catch (JSONException e) {
                                 e.printStackTrace();
                             }
                         }
@@ -198,19 +289,9 @@ public class ScheduleViewFragment extends Fragment {
         return v;
     }
 
-    private String FormatDateToString(String shiftDate) throws ParseException {
-        DateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
-        Date date1 = dateFormat.parse(shiftDate);
-
-        Date date = null;
-        try {
-            date = new SimpleDateFormat("hhmm").parse(String.format("%04d", Integer.parseInt(date1.getHours() + "" + date1.getMinutes() + "0")));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a");
-
-        return date1.getDate() + " " + sdf.format(date);
+    private String FormatDateToString(Date shiftDate){
+        DateFormat df = new SimpleDateFormat("hh:mm aa");
+        return df.format(shiftDate);
     }
 
 
@@ -270,8 +351,10 @@ public class ScheduleViewFragment extends Fragment {
     private View.OnClickListener logoutUser1 = v -> {
 
         CalanderFragment test = new CalanderFragment();
-        getChildFragmentManager().beginTransaction().replace(R.id.test123, test).commit();
-
+        FragmentManager manager = getChildFragmentManager();
+        FragmentTransaction trans = manager.beginTransaction();
+        trans.replace(R.id.test123, test);
+        trans.commit();
 
         /**
         final Dialog fbDialogue = new Dialog(getActivity(), android.R.style.Theme_Black_NoTitleBar);
@@ -280,5 +363,39 @@ public class ScheduleViewFragment extends Fragment {
         fbDialogue.setCancelable(true);
         fbDialogue.show();
          */
+    };
+
+    private  View.OnClickListener prevWeek = v -> {
+        ScheduleViewFragment lastWeek = new ScheduleViewFragment();
+        Bundle toSchView = new Bundle();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(startDate);
+        cal.add(Calendar.DAY_OF_WEEK, -7);
+
+        Instant i = Instant.now();
+        toSchView.putLong("startDate", cal.getTime().getTime());
+        lastWeek.setArguments(toSchView);
+
+        FragmentManager manager = getChildFragmentManager();
+        FragmentTransaction trans = manager.beginTransaction();
+        trans.replace(R.id.test123, lastWeek);
+        trans.commit();
+    };
+
+    private  View.OnClickListener nextWeek = v -> {
+        ScheduleViewFragment nextWeek = new ScheduleViewFragment();
+        Bundle toSchView = new Bundle();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(startDate);
+        cal.add(Calendar.DAY_OF_WEEK, 7);
+
+        Instant i = Instant.now();
+        toSchView.putLong("startDate", cal.getTime().getTime());
+        nextWeek.setArguments(toSchView);
+
+        FragmentManager manager = getChildFragmentManager();
+        FragmentTransaction trans = manager.beginTransaction();
+        trans.replace(R.id.test123, nextWeek);
+        trans.commit();
     };
 }

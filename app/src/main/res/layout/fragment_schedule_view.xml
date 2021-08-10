@@ -31,25 +31,24 @@
 
     <TextView
         android:id="@+id/month"
-        android:layout_width="263dp"
-        android:layout_height="106dp"
+        android:layout_width="match_parent"
+        android:layout_height="292dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="74dp"
-        android:layout_marginTop="125dp"
-        android:layout_marginEnd="73dp"
-        android:layout_marginBottom="501dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginBottom="400dp"
         android:foregroundGravity="center_horizontal"
-        android:gravity="center"
+        android:gravity="center_horizontal"
         android:padding="@dimen/activity_horizontal_margin"
         android:text="@string/month"
         android:textColor="#FFFFFF"
         android:textSize="48sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/month"
+        app:layout_constraintTop_toBottomOf="@id/year"
         tools:ignore="NotSibling" />
 
     <LinearLayout
@@ -112,7 +111,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="166dp"
-        android:gravity="center"
+        android:gravity="start"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -125,7 +124,7 @@
             android:id="@+id/dayOneGroup"
             android:layout_width="420dp"
             android:layout_height="wrap_content"
-            android:gravity="center"
+            android:gravity="left"
             android:orientation="horizontal">
 
             <TextView
@@ -152,7 +151,7 @@
             android:id="@+id/dayTwoGroup"
             android:layout_width="420dp"
             android:layout_height="wrap_content"
-            android:gravity="center"
+            android:gravity="left"
             android:orientation="horizontal">
 
             <TextView
@@ -178,9 +177,9 @@
             android:id="@+id/dayThreeGroup"
             android:layout_width="420dp"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:showDividers="middle"
-            android:orientation="horizontal">
+            android:gravity="left"
+            android:orientation="horizontal"
+            android:showDividers="middle">
 
             <TextView
                 android:id="@+id/dayThreeText"
@@ -205,7 +204,7 @@
             android:id="@+id/dayFourGroup"
             android:layout_width="420dp"
             android:layout_height="wrap_content"
-            android:gravity="center"
+            android:gravity="left"
             android:orientation="horizontal">
 
             <TextView
@@ -231,7 +230,7 @@
             android:id="@+id/dayFiveGroup"
             android:layout_width="420dp"
             android:layout_height="wrap_content"
-            android:gravity="center"
+            android:gravity="left"
             android:orientation="horizontal">
 
             <TextView
@@ -257,7 +256,7 @@
             android:id="@+id/daySixGroup"
             android:layout_width="420dp"
             android:layout_height="wrap_content"
-            android:gravity="center"
+            android:gravity="left"
             android:orientation="horizontal">
 
             <TextView
@@ -283,7 +282,7 @@
             android:id="@+id/daySevenGroup"
             android:layout_width="420dp"
             android:layout_height="wrap_content"
-            android:gravity="center"
+            android:gravity="left"
             android:orientation="horizontal">
 
             <TextView

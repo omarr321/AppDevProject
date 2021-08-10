@@ -90,9 +90,9 @@ public class HomeFragment extends Fragment {
                                 FirebaseFunctionsException.Code code = ffe.getCode();
                                 Object details = ffe.getDetails();
                             }
-                            Log.d("AAAA Object Details", e.toString());
+                            Log.d("HOME Object Details", e.toString());
                         }else{
-                            Log.d("AAAA dataGotten", task.getResult());
+                            Log.d("HOME dataGotten", task.getResult());
                             try {
                                 int shiftCount = 0;
                                 JSONArray temp = new JSONArray(task.getResult());
@@ -101,16 +101,16 @@ public class HomeFragment extends Fragment {
                                     shiftsArr.put(temp.get(i));
                                 }
                                 for (int i = 0; i < shiftsArr.length(); i++) {
-                                    Log.d("AAAA shift" + i, shiftsArr.get(i).toString());
+                                    Log.d("HOME shift" + i, shiftsArr.get(i).toString());
                                     Date[] shiftTimes = ShiftToDate((JSONObject) shiftsArr.get(i));
-                                    Log.d("AAAA shift start", shiftTimes[0].toString());
-                                    Log.d("AAAA shift end", shiftTimes[1].toString());
+                                    Log.d("HOME shift start", shiftTimes[0].toString());
+                                    Log.d("HOME shift end", shiftTimes[1].toString());
 
                                     String startDateFormat;
                                     String endDateFormat;
                                     startDateFormat = FormatDateToString(shiftTimes[0].toString());
                                     endDateFormat = FormatDateToString(shiftTimes[1].toString());
-                                    System.out.println(startDateFormat + " to " + endDateFormat);
+                                    Log.d("HOME formatted str", startDateFormat + " - " + endDateFormat);
                                 }
 
                             } catch (JSONException | ParseException e) {
