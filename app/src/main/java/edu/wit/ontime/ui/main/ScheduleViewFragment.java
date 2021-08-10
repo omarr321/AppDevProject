@@ -75,7 +75,7 @@ public class ScheduleViewFragment extends Fragment {
     String authTok;
     String monthR;
     TextView year, month;
-    TextView day1Text,day2Text,day3Text,day4Text,day5Text,day6Text,day7Text,day1WH,day2WH,day3WH,day4WH,day5WH,day6WH, day7WH;
+    TextView day1Text,day2Text,day3Text,day4Text,day5Text,day6Text,day7Text,day1WH,day2WH,day3WH,day4WH,day5WH,day6WH,day7WH;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -298,8 +298,6 @@ public class ScheduleViewFragment extends Fragment {
                                 e.printStackTrace();
                             }
                         }
-
-                        // ...
                     }
                 });
     }
@@ -320,6 +318,7 @@ public class ScheduleViewFragment extends Fragment {
     }
 
     private Task<String> addMessage(String text) {
+        System.out.println(startDate.getTime() + "the time");
         Map<String, Object> data = new HashMap<>();
                 data.put("time_start", startDate.getTime());
                 data.put("time_end", endDate.getTime());

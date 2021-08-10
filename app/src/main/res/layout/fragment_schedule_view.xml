@@ -134,6 +134,7 @@
                 android:layout_weight="1"
                 android:gravity="end"
                 android:text="@string/dayText"
+                android:textColor="#FFFFFF"
                 android:textSize="25sp" />
 
             <TextView
@@ -143,6 +144,7 @@
                 android:layout_weight="1"
                 android:gravity="start"
                 android:text="@string/workHour"
+                android:textColor="#FFFFFF"
                 android:textSize="25sp" />
 
         </LinearLayout>
@@ -161,7 +163,9 @@
                 android:layout_weight="1"
                 android:gravity="end"
                 android:text="@string/dayText"
-                android:textSize="25sp" />
+                android:textColor="#FFFFFF"
+                android:textSize="25sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/dayTwoWH"
@@ -170,6 +174,7 @@
                 android:layout_weight="1"
                 android:gravity="start"
                 android:text="@string/workHour"
+                android:textColor="#FFFFFF"
                 android:textSize="25sp" />
         </LinearLayout>
 
@@ -188,6 +193,7 @@
                 android:layout_weight="1"
                 android:gravity="end"
                 android:text="@string/dayText"
+                android:textColor="#FFFFFF"
                 android:textSize="25sp" />
 
             <TextView
@@ -197,6 +203,7 @@
                 android:layout_weight="1"
                 android:gravity="start"
                 android:text="@string/workHour"
+                android:textColor="#FFFFFF"
                 android:textSize="25sp" />
         </LinearLayout>
 
@@ -214,6 +221,7 @@
                 android:layout_weight="1"
                 android:gravity="end"
                 android:text="@string/dayText"
+                android:textColor="#FFFFFF"
                 android:textSize="25sp" />
 
             <TextView
@@ -223,6 +231,7 @@
                 android:layout_weight="1"
                 android:gravity="start"
                 android:text="@string/workHour"
+                android:textColor="#FFFFFF"
                 android:textSize="25sp" />
         </LinearLayout>
 
@@ -240,6 +249,7 @@
                 android:layout_weight="1"
                 android:gravity="end"
                 android:text="@string/dayText"
+                android:textColor="#FFFFFF"
                 android:textSize="25sp" />
 
             <TextView
@@ -249,6 +259,7 @@
                 android:layout_weight="1"
                 android:gravity="start"
                 android:text="@string/workHour"
+                android:textColor="#FFFFFF"
                 android:textSize="25sp" />
         </LinearLayout>
 
@@ -266,6 +277,7 @@
                 android:layout_weight="1"
                 android:gravity="end"
                 android:text="@string/dayText"
+                android:textColor="#FFFFFF"
                 android:textSize="25sp" />
 
             <TextView
@@ -275,6 +287,7 @@
                 android:layout_weight="1"
                 android:gravity="start"
                 android:text="@string/workHour"
+                android:textColor="#FFFFFF"
                 android:textSize="25sp" />
         </LinearLayout>
 
@@ -292,6 +305,7 @@
                 android:layout_weight="1"
                 android:gravity="end"
                 android:text="@string/dayText"
+                android:textColor="#FFFFFF"
                 android:textSize="25sp" />
 
             <TextView
@@ -301,6 +315,7 @@
                 android:layout_weight="1"
                 android:gravity="start"
                 android:text="@string/workHour"
+                android:textColor="#FFFFFF"
                 android:textSize="25sp" />
         </LinearLayout>
     </LinearLayout>
