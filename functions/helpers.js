@@ -19,12 +19,14 @@ const getUser = async (uid) => {
 
 const getUserMemberDocs = async (uid, callback = (members) => {
 }) => {
-    return await getMemberDocs(await getUser(uid));
+    const user = await getUser(uid)
+    const members = (await getMemberDocs(user)).docs;
+    return {user, members}
 }
 
-const getMemberFromOrgDoc = async (uid, organization_id) => {
+const getMemberFromOrgDoc = async (uid, organization) => {
     let member = null;
-    const members = (await getUserMemberDocs(uid)).docs;
+    const {user, members} = await getUserMemberDocs(uid);
 
     // Check each member doc to match organizations
     for (let m in members) {

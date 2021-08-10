@@ -45,6 +45,7 @@ exports.shifts = functions.https.onCall((async (data, context) => {
     const uid = verifyUid(context);
 
     // TODO: Make time validation modular
+    // TODO: Validate time so time_start < time_end
     let {time_start, time_end} = data;
     time_start = new Date(time_start);
     time_end = new Date(time_end);
@@ -106,7 +107,7 @@ exports.punch = functions.https.onCall((async (data, context) => {
 
     try {
 
-        const member = await getMemberFromOrgDoc(uid, organization_id);
+        const {member} = await getMemberFromOrgDoc(uid, organization_id);
 
         // Punch the user depending on current status
         const status = (await member.get()).data().status;
@@ -145,7 +146,7 @@ exports.break = functions.https.onCall((async (data, context) => {
 
     try {
 
-        const member = await getMemberFromOrgDoc(uid, organization_id);
+        const {member} = await getMemberFromOrgDoc(uid, organization_id);
 
         // Break only if user is currently working
         const status = (await member.get()).data().status;
