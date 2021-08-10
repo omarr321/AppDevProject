@@ -14,7 +14,9 @@ const MESSAGE_INTERNAL = "Something weird has occurred on our end! Please contac
 const {
     verifyUid,
     getUserShifts,
-    getMemberFromOrgDoc, getShift
+    getMemberFromOrgDoc,
+    getShift,
+    getUserMemberDocs
 } = require("./helpers");
 
 exports.createUser = functions.auth.user().onCreate(async (user) => {
@@ -93,6 +95,29 @@ exports.hoursAccumulated = functions.https.onCall((async (data, context) => {
             throw new functions.https.HttpsError('internal', MESSAGE_INTERNAL);
         }
     }
+}))
+
+exports.getOrganizations = functions.https.onCall((async (data, context) => {
+
+    // context.auth = {
+    //     uid: "V8KoG7x5BhanVcENuzWujolzvoE2"
+    // }
+
+    const uid = verifyUid(context);
+
+    // Get all member docs attached to user
+    let results = [];
+    const {members} = await getUserMemberDocs(uid);
+
+    for (let m in members) {
+        results = results.concat({
+            org: (await members[m].ref.parent.parent.get()).data(),
+            member: (await members[m].ref.get()).data()
+        })
+    }
+
+    return results;
+
 }))
 
 exports.punch = functions.https.onCall((async (data, context) => {
