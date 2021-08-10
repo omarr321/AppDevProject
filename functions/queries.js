@@ -14,5 +14,6 @@ exports.getUsersShifts = async (userRef, callback, time_start, time_end) => {
         .where('assignee', '==', userRef)
         .where('time_start', '>=', time_start)
         .where('time_start', '<=', time_end)
+        .orderBy("time_start", "asc")
         .get()).forEach(callback);
 }
