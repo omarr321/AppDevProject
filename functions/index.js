@@ -8,9 +8,9 @@ const db = admin.firestore();
 // Import helper methods
 const {getUserDoc, getUsersShifts, getMemberDocs} = require("./queries");
 
-const TIME_HOUR = 1000*60*60;
-const TIME_DAY = TIME_HOUR*24;
-const TIME_WEEK = TIME_DAY*7;
+const TIME_HOUR = 1000 * 60 * 60;
+const TIME_DAY = TIME_HOUR * 24;
+const TIME_WEEK = TIME_DAY * 7;
 
 const MESSAGE_INTERNAL = "Something weird has occurred on our end! Please contact the developers to report a bug."
 
@@ -30,7 +30,8 @@ const getUser = async (uid) => {
     return user.docs[0].ref;
 }
 
-const getUserMemberDocs = async (uid, callback=(members) => {}) => {
+const getUserMemberDocs = async (uid, callback = (members) => {
+}) => {
     return await getMemberDocs(await getUser(uid));
 }
 
@@ -39,7 +40,7 @@ const getMemberFromOrgDoc = async (uid, organization_id) => {
     const members = (await getUserMemberDocs(uid)).docs;
 
     // Check each member doc to match organizations
-    for(let m in members) {
+    for (let m in members) {
         let org = members[m].ref.parent.parent;
         if (org.id == organization_id) {
             member = members[m].ref;
@@ -54,7 +55,8 @@ const getMemberFromOrgDoc = async (uid, organization_id) => {
     return member;
 }
 
-const getUserShifts = async (uid, callback=(shift) => {}, time_start=new Date(), time_end = new Date(Date.now() + TIME_WEEK)) => {
+const getUserShifts = async (uid, callback = (shift) => {
+}, time_start = new Date(), time_end = new Date(Date.now() + TIME_WEEK)) => {
     // TODO: Support optional references
     console.log(time_start)
     console.log(time_end)
@@ -112,7 +114,7 @@ exports.shifts = functions.https.onCall((async (data, context) => {
     }
 }))
 
-exports.hoursAccumulated = functions.https.onCall(( async (data, context) => {
+exports.hoursAccumulated = functions.https.onCall((async (data, context) => {
 
     const uid = verifyUid(context);
 
@@ -125,7 +127,7 @@ exports.hoursAccumulated = functions.https.onCall(( async (data, context) => {
 
         await getUserShifts(uid, (shift) => {
             const data = shift.data();
-            sum = sum + new Date(data.time_end - data.time_start).getTime() / (60*60);
+            sum = sum + new Date(data.time_end - data.time_start).getTime() / (60 * 60);
         }, time_start, time_end);
 
         return {total_hours: sum};
