@@ -1,30 +1,22 @@
 package edu.wit.ontime.ui.main;
 
-import android.app.Dialog;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
-import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 
-import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -36,7 +28,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.functions.FirebaseFunctions;
 import com.google.firebase.functions.FirebaseFunctionsException;
 import com.google.gson.Gson;
-import com.google.type.DateTime;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -49,9 +40,9 @@ public class HomeFragment extends Fragment {
 
     private FirebaseFunctions mFunctions;
     private Date startDate;
-    private Date endDate;
-    TextView time;
-    String currentTimeFormat;
+    private TextView time;
+    private TextView schedule;
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -59,27 +50,16 @@ public class HomeFragment extends Fragment {
 
         Instant i = Instant.now();
         startDate = new Date(i.toEpochMilli());
-
-        currentTimeFormat = new SimpleDateFormat("HHmm", Locale.getDefault()).format(new Date());
-        //System.out.println(currentTimeFormat + "HERE!");
         time = v.findViewById(R.id.currentTime);
+        schedule = v.findViewById(R.id.currentShift);
 
-
-
-        Date date = null;
-        try {
-            date = new SimpleDateFormat("hhmm").parse(String.format("%04d", Integer.parseInt(currentTimeFormat)));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a");
-        System.out.println(sdf.format(date));
-        time.setText(sdf.format(date));
+        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm aa");
+        time.setText(sdf.format(startDate));
 
         mFunctions = FirebaseFunctions.getInstance();
 
         String authTok = FirebaseAuth.getInstance().getUid();
-        addMessage(authTok)
+        getCurrShift(authTok)
                 .addOnCompleteListener(new OnCompleteListener<String>() {
                     @Override
                     public void onComplete(@NonNull Task<String> task) {
@@ -108,12 +88,18 @@ public class HomeFragment extends Fragment {
 
                                     String startDateFormat;
                                     String endDateFormat;
-                                    startDateFormat = FormatDateToString(shiftTimes[0].toString());
-                                    endDateFormat = FormatDateToString(shiftTimes[1].toString());
-                                    Log.d("HOME formatted str", startDateFormat + " - " + endDateFormat);
+                                    startDateFormat = FormatDateToString(shiftTimes[0]);
+                                    endDateFormat = FormatDateToString(shiftTimes[1]);
+                                    String shiftView = startDateFormat + " - " + endDateFormat;
+                                    Log.d("HOME formatted str", shiftView);
+                                    schedule.setText(shiftView);
+                                }
+                                if (shiftsArr.length() == 0) {
+                                    Log.d("HOME formatted str", "No Shift");
+                                    schedule.setText("No Shift");
                                 }
 
-                            } catch (JSONException | ParseException e) {
+                            } catch (JSONException e) {
                                 e.printStackTrace();
                             }
                         }
@@ -127,19 +113,9 @@ public class HomeFragment extends Fragment {
         return v;
     }
 
-    private String FormatDateToString(String shiftDate) throws ParseException {
-        DateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
-        Date date1 = dateFormat.parse(shiftDate);
-
-        Date date = null;
-        try {
-            date = new SimpleDateFormat("hhmm").parse(String.format("%04d", Integer.parseInt(date1.getHours() + "" + date1.getMinutes() + "0")));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a");
-
-        return date1.getDate() + " " + sdf.format(date);
+    private String FormatDateToString(Date shiftDate){
+        DateFormat df = new SimpleDateFormat("hh:mm aa");
+        return df.format(shiftDate);
     }
 
 
@@ -153,15 +129,115 @@ public class HomeFragment extends Fragment {
     }
 
 
-    private Task<String> addMessage(String text) {
+    private Task<String> getCurrShift(String text) {
         Map<String, Object> data = new HashMap<>();
-        data.put("time_start", startDate.getTime());
-        data.put("time_end", startDate.getTime() + (86400000));
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(startDate);
+        cal.set(Calendar.DAY_OF_WEEK, -1);
+        cal.set(Calendar.HOUR, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
 
-        System.out.println(startDate.getTime() + "Here!!! - home");
+        data.put("time_start", cal.getTime().getTime());
+
+        cal.set(Calendar.HOUR, 23);
+        cal.set(Calendar.MINUTE, 59);
+        cal.set(Calendar.SECOND, 59);
+        cal.set(Calendar.MILLISECOND, 999);
+        data.put("time_end", cal.getTime().getTime());
+
+        //System.out.println(startDate.getTime() + "Here!!! - home");
 
 
         return mFunctions.getHttpsCallable("shifts")
+                .call(data)
+                .continueWith(task -> {
+                    Gson g = new Gson();
+                    return g.toJson(task.getResult().getData());
+                });
+    }
+
+    private Task<String> gethoursAcum(String text) {
+        Map<String, Object> data = new HashMap<>();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(startDate);
+        cal.set(Calendar.DAY_OF_WEEK, -1);
+        cal.set(Calendar.HOUR, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+
+        data.put("time_start", cal.getTime().getTime());
+
+        cal.set(Calendar.HOUR, 23);
+        cal.set(Calendar.MINUTE, 59);
+        cal.set(Calendar.SECOND, 59);
+        cal.set(Calendar.MILLISECOND, 999);
+        data.put("time_end", cal.getTime().getTime());
+
+        //System.out.println(startDate.getTime() + "Here!!! - home");
+
+
+        return mFunctions.getHttpsCallable("hoursAccumulated")
+                .call(data)
+                .continueWith(task -> {
+                    Gson g = new Gson();
+                    return g.toJson(task.getResult().getData());
+                });
+    }
+
+    private Task<String> getPay(String text) {
+        Map<String, Object> data = new HashMap<>();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(startDate);
+        cal.set(Calendar.DAY_OF_WEEK, -1);
+        cal.set(Calendar.HOUR, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+
+        data.put("time_start", cal.getTime().getTime());
+
+        cal.set(Calendar.HOUR, 23);
+        cal.set(Calendar.MINUTE, 59);
+        cal.set(Calendar.SECOND, 59);
+        cal.set(Calendar.MILLISECOND, 999);
+        data.put("time_end", cal.getTime().getTime());
+
+        //System.out.println(startDate.getTime() + "Here!!! - home");
+
+
+        return mFunctions.getHttpsCallable("hoursAccumulated")
+                .call(data)
+                .continueWith(task -> {
+                    Gson g = new Gson();
+                    return g.toJson(task.getResult().getData());
+                });
+    }
+
+    private Task<String> getOrg(String text) {
+        Map<String, Object> data = new HashMap<>();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(startDate);
+        cal.set(Calendar.DAY_OF_WEEK, -1);
+        cal.set(Calendar.HOUR, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+
+        data.put("time_start", cal.getTime().getTime());
+
+        cal.set(Calendar.HOUR, 23);
+        cal.set(Calendar.MINUTE, 59);
+        cal.set(Calendar.SECOND, 59);
+        cal.set(Calendar.MILLISECOND, 999);
+        data.put("time_end", cal.getTime().getTime());
+
+        //System.out.println(startDate.getTime() + "Here!!! - home");
+
+
+        return mFunctions.getHttpsCallable("hoursAccumulated")
                 .call(data)
                 .continueWith(task -> {
                     Gson g = new Gson();

@@ -66,11 +66,11 @@
         app:layout_constraintVertical_bias="0.465" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/shiftText"
         android:layout_width="242dp"
         android:layout_height="95dp"
         android:gravity="center"
-        android:text="Todays Shift 9:30 - 4:00"
+        android:text="Todays Shift:"
         android:textColor="#FFFFFF"
         android:textSize="34sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -78,7 +78,22 @@
         app:layout_constraintHorizontal_bias="0.473"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.621" />
+        app:layout_constraintVertical_bias="0.611" />
+
+    <TextView
+        android:id="@+id/currentShift"
+        android:layout_width="348dp"
+        android:layout_height="78dp"
+        android:gravity="center"
+        android:text="9:30 - 4:00"
+        android:textColor="#FFFFFF"
+        android:textSize="34sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.473"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.683" />
 
     <TextView
         android:id="@+id/textView5"
