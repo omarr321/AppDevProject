@@ -32,6 +32,7 @@ import com.google.gson.Gson;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import edu.wit.ontime.R;
 
@@ -133,47 +134,60 @@ public class HomeFragment extends Fragment {
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
+
+                            TextView hoursWorked = v.findViewById(R.id.todayHours);
+                            TextView todayGross = v.findViewById(R.id.todayGross);
+                            TextView todayNet = v.findViewById(R.id.todayNet);
+
+                            getOrg(authTok)
+                                    .addOnCompleteListener(new OnCompleteListener<String>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<String> task) {
+                                            if (!task.isSuccessful()) {
+                                                Exception e = task.getException();
+                                                if (e instanceof FirebaseFunctionsException) {
+                                                    FirebaseFunctionsException ffe = (FirebaseFunctionsException) e;
+                                                    FirebaseFunctionsException.Code code = ffe.getCode();
+                                                    Object details = ffe.getDetails();
+                                                }
+                                                Log.d("HOME Object Details", e.toString());
+                                            }else{
+                                                try{
+                                                    JSONArray temp = new JSONArray(task.getResult());
+                                                    JSONObject org = (JSONObject) temp.get(0);
+                                                    Log.d("HOME Org Data", org.toString());
+
+                                                    JSONObject member = (JSONObject) org.get("member");
+                                                    Log.d("HOME Member Data", member.toString());
+
+                                                    JSONObject pay = (JSONObject) member.get("pay");
+                                                    Log.d("HOME Pay Data", pay.toString());
+                                                    double dailyPay = pay.getInt("amount");
+                                                    String type = pay.getString("type");
+
+                                                    hoursWorked.setText("Today's Hours: " + hours);
+
+                                                    if (type.equals("hourly")) {
+                                                        todayGross.setText("Today's Gross: $" + (hours*dailyPay));
+                                                        todayNet.setText("Today's Net: $" + ((hours*dailyPay)*.9375));
+                                                    } else {
+                                                        todayGross.setText("Today's Gross: N/A");
+                                                        todayNet.setText("Today's Net: N/A");
+                                                    }
+
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+
+                                            // ...
+                                        }
+                                    });
                         }
 
                         // ...
                     }
                 });
-
-        getOrg(authTok)
-                .addOnCompleteListener(new OnCompleteListener<String>() {
-                    @Override
-                    public void onComplete(@NonNull Task<String> task) {
-                        if (!task.isSuccessful()) {
-                            Exception e = task.getException();
-                            if (e instanceof FirebaseFunctionsException) {
-                                FirebaseFunctionsException ffe = (FirebaseFunctionsException) e;
-                                FirebaseFunctionsException.Code code = ffe.getCode();
-                                Object details = ffe.getDetails();
-                            }
-                            Log.d("HOME Object Details", e.toString());
-                        }else{
-                            //Log.d("HOME dataGotten Org", task.getResult());
-                            try{
-                                JSONArray temp = new JSONArray(task.getResult());
-                                JSONObject org = (JSONObject) temp.get(0);
-                                Log.d("HOME Org Data", org.toString());
-
-                                JSONObject member = (JSONObject) org.get("member");
-                                Log.d("HOME Member Data", member.toString());
-
-                                JSONObject pay = (JSONObject) member.get("pay");
-                                Log.d("HOME Pay Data", pay.toString());
-
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-
-                        // ...
-                    }
-                });
-
-
 
         return v;
     }
