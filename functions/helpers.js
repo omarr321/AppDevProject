@@ -41,7 +41,7 @@ const getMemberFromOrgDoc = async (uid, organization) => {
         throw new functions.https.HttpsError("not-found", "The user does not belong to the provided organization.")
     }
 
-    return member;
+    return {user, member};
 }
 
 const getUserShifts = async (uid, callback = (shift) => {
