@@ -36,7 +36,7 @@ public class HomeFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_main, container, false);
 
         currentTimeFormat = new SimpleDateFormat("HHmm", Locale.getDefault()).format(new Date());
-        //System.out.println(currentTimeFormat + "HERE!");
+        System.out.println(currentTimeFormat + "HERE!");
         time = v.findViewById(R.id.currentTime);
 
 

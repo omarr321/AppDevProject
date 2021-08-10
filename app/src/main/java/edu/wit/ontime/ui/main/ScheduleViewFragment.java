@@ -3,6 +3,7 @@ package edu.wit.ontime.ui.main;
 import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ import edu.wit.ontime.R;
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.tasks.Continuation;
@@ -32,24 +34,62 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.functions.FirebaseFunctions;
 import com.google.firebase.functions.FirebaseFunctionsException;
 import com.google.firebase.functions.HttpsCallableResult;
+import com.google.gson.Gson;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+@RequiresApi(api = Build.VERSION_CODES.O)
 public class ScheduleViewFragment extends Fragment {
-    Button logout;
+    private Button logout;
     private FirebaseFunctions mFunctions;
+    private Date startDate;
+    private Date endDate;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        Bundle temp = getArguments();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        //Date startDate = new Date(savedInstanceState.getLong("startDate"));
+        startDate = new Date(temp.getLong("startDate"));
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(startDate);
+        cal.set(Calendar.AM_PM, Calendar.AM);
+        cal.set(Calendar.HOUR, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+
+        Log.d("AAAA Current Date", cal.getTime().toString());
+        while (cal.get( Calendar.DAY_OF_WEEK ) != Calendar.SUNDAY) {
+            cal.add(Calendar.DAY_OF_WEEK, -1);
+        }
+
+        Log.d("AAAA Last Sunday", cal.getTime().toString());
+        startDate = cal.getTime();
+        cal.set(Calendar.AM_PM, Calendar.PM);
+        cal.set(Calendar.HOUR, 11);
+        cal.set(Calendar.MINUTE, 59);
+        cal.set(Calendar.SECOND, 59);
+        cal.set(Calendar.MILLISECOND, 999);
+        cal.set(Calendar.DAY_OF_WEEK, 7);
+
+        Log.d("AAAA Next Saturday", cal.getTime().toString());
+        endDate = cal.getTime();
 
         View v = inflater.inflate(R.layout.fragment_schedule_view, container, false);
         TextView year = (TextView) v.findViewById(R.id.year);
@@ -76,6 +116,8 @@ public class ScheduleViewFragment extends Fragment {
 
         TextView day7Text = (TextView) v.findViewById(R.id.daySevenText);
         TextView day7WH = (TextView) v.findViewById(R.id.daySevenWH);
+
+
 
         CollectionReference users = db.collection("users");
         String authTok = FirebaseAuth.getInstance().getUid();
@@ -116,10 +158,26 @@ public class ScheduleViewFragment extends Fragment {
                                 FirebaseFunctionsException.Code code = ffe.getCode();
                                 Object details = ffe.getDetails();
                             }
-
-
+                            Log.d("AAAA Object Details", e.toString());
                         }else{
-                            System.out.println(task.getResult());
+                            Log.d("AAAA dataGotten", task.getResult());
+                            try {
+                                int shiftCount = 0;
+                                JSONArray temp = new JSONArray(task.getResult());
+                                JSONArray shiftsArr = new JSONArray();
+                                for (int i = 0; i < temp.length(); i++) {
+                                    shiftsArr.put(temp.get(i));
+                                }
+                                for (int i = 0; i < shiftsArr.length(); i++) {
+                                    Log.d("AAAA shift" + i, shiftsArr.get(i).toString());
+                                    Date[] shiftTimes = ShiftToDate((JSONObject) shiftsArr.get(i));
+                                    Log.d("AAAA shift start", shiftTimes[0].toString());
+                                    Log.d("AAAA shift end", shiftTimes[1].toString());
+                                }
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
                         }
 
                         // ...
@@ -129,17 +187,28 @@ public class ScheduleViewFragment extends Fragment {
 
         return v;
     }
+    private Date[] ShiftToDate(JSONObject obj) throws JSONException {
+        JSONObject shiftTime = obj.getJSONObject("time_start");
+        Date shiftStart = new Date(shiftTime.getLong("_seconds")*1000);
+        shiftTime = obj.getJSONObject("time_end");
+        Date shiftEnd = new Date(shiftTime.getLong("_seconds")*1000);
+        Date[] temp = {shiftStart, shiftEnd};
+        return temp;
+    }
 
     private Task<String> addMessage(String text) {
-        // Create the arguments to the callable function.
+        Map<String, Object> data = new HashMap<>();
+                data.put("time_start", startDate.getTime());
+                data.put("time_end", endDate.getTime());
 
 
         return mFunctions.getHttpsCallable("shifts")
-                .call(text)
+                .call(data)
                 .continueWith(task -> {
                     //String result = (String) task.getResult().getData();
-                    System.out.println(task.getResult().getData());
-                    return (String) task.getResult().getData();
+                    //System.out.println(task.getResult().getData());
+                    Gson g = new Gson();
+                    return g.toJson(task.getResult().getData());
                 });
     }
 

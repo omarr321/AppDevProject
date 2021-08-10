@@ -1,5 +1,6 @@
 package edu.wit.ontime.ui.main;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -25,8 +27,10 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
 
+import java.time.Instant;
 import edu.wit.ontime.R;
 
+@RequiresApi(api = Build.VERSION_CODES.O)
 public class CalanderFragment extends Fragment {
     CalendarView view;
     Button returnButton;
@@ -91,14 +95,13 @@ public class CalanderFragment extends Fragment {
         System.out.println("RAN!");
         System.out.println(text.getTime());
         Map<String, Object> data = new HashMap<>();
-        data.put("", authTok);
         data.put("time_start", text.getTime());
         data.put("time_end", Long.valueOf(1629001818));
         // Create the arguments to the callable function.
 
 
         return mFunctions.getHttpsCallable("shifts")
-                .call(text.getTime())
+                .call(data)
                 .continueWith(task -> {
                     //String result = (String) task.getResult().getData();
                     System.out.println(task.getResult().getData());
@@ -132,6 +135,13 @@ public class CalanderFragment extends Fragment {
     private View.OnClickListener returnToUser = v -> {
         System.out.println("Did it");
         ScheduleViewFragment test = new ScheduleViewFragment();
+
+
+         Bundle toSchView = new Bundle();
+         Instant i = Instant.now();
+         toSchView.putLong("startDate", i.toEpochMilli());
+         test.setArguments(toSchView);
+
         getChildFragmentManager().beginTransaction().replace(R.id.test321, test).commit();
     };
 
