@@ -54,17 +54,21 @@ exports.createUser = functions.auth.user().onCreate(async (user) => {
     }
 })
 
-// TODO: Add 11:59 to time_end
 exports.shifts = functions.https.onCall((async (data, context) => {
 
     const uid = verifyUid(context);
+
+    // TODO: Make time validation modular
+    let {time_start, time_end} = data;
+    time_start = new Date(time_start);
+    time_end = new Date(time_end);
 
     try {
         let results = [];
 
         await getShifts(uid, (shift) => {
             results = results.concat(shift.data());
-        });
+        }, time_start, time_end);
 
         return results;
     } catch (e) {
@@ -82,13 +86,17 @@ exports.hoursAccumulated = functions.https.onCall(( async (data, context) => {
 
     const uid = verifyUid(context);
 
+    let {time_start, time_end} = data;
+    time_start = new Date(time_start);
+    time_end = new Date(time_end);
+
     try {
         let sum = 0;
 
         await getShifts(uid, (shift) => {
             const data = shift.data();
             sum = sum + new Date(data.time_end - data.time_start).getTime() / (60*60);
-        });
+        }, time_start, time_end);
 
         return {total_hours: sum};
     } catch (e) {
