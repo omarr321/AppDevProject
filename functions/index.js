@@ -5,64 +5,17 @@ const admin = require("firebase-admin");
 admin.initializeApp()
 const db = admin.firestore();
 
-// Import helper methods
-const {getUserDoc, getUsersShifts, getMemberDocs} = require("./queries");
-
 const TIME_HOUR = 1000 * 60 * 60;
 const TIME_DAY = TIME_HOUR * 24;
 const TIME_WEEK = TIME_DAY * 7;
 
 const MESSAGE_INTERNAL = "Something weird has occurred on our end! Please contact the developers to report a bug."
 
-const verifyUid = (context) => {
-    if (!context.auth) {
-        throw new functions.https.HttpsError('failed-precondition', 'The function must be called ' +
-            'while authenticated.')
-    }
-    return context.auth.uid;
-}
-
-const getUser = async (uid) => {
-    const user = await getUserDoc(uid);
-    if (user.empty) {
-        throw new functions.https.HttpsError('not-found', "The user is not registered in the database. Please contact customer service to resolve this issue.")
-    }
-    return user.docs[0].ref;
-}
-
-const getUserMemberDocs = async (uid, callback = (members) => {
-}) => {
-    return await getMemberDocs(await getUser(uid));
-}
-
-const getMemberFromOrgDoc = async (uid, organization_id) => {
-    let member = null;
-    const members = (await getUserMemberDocs(uid)).docs;
-
-    // Check each member doc to match organizations
-    for (let m in members) {
-        let org = members[m].ref.parent.parent;
-        if (org.id == organization_id) {
-            member = members[m].ref;
-        }
-    }
-
-    // Return if user is not apart of organization
-    if (member == null) {
-        throw new functions.https.HttpsError("not-found", "The user does not belong to the provided organization.")
-    }
-
-    return member;
-}
-
-const getUserShifts = async (uid, callback = (shift) => {
-}, time_start = new Date(), time_end = new Date(Date.now() + TIME_WEEK)) => {
-    // TODO: Support optional references
-    console.log(time_start)
-    console.log(time_end)
-    const user = await getUser(uid);
-    await getUsersShifts(user, callback, time_start, time_end);
-}
+const {
+    verifyUid,
+    getUserShifts,
+    getMemberFromOrgDoc
+} = require("./helpers");
 
 exports.createUser = functions.auth.user().onCreate(async (user) => {
     try {
