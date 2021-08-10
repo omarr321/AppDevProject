@@ -6,7 +6,7 @@ exports.getUserDoc = async (uid) => {
 }
 
 exports.getMemberDocs = async (userRef) => {
-    return await db.collectionGroup('members').where('user_id', '==', userRef);
+    return await db.collectionGroup('members').where('user_id', '==', userRef).get();
 }
 
 exports.getUsersShifts = async (userRef, callback, time_start, time_end) => {

@@ -30,8 +30,28 @@ const getUser = async (uid) => {
     return user.docs[0].ref;
 }
 
-const getUserMemberDocs = async (uid, callback=(shift) => {}) => {
+const getUserMemberDocs = async (uid, callback=(members) => {}) => {
     return await getMemberDocs(await getUser(uid));
+}
+
+const getMemberFromOrgDoc = async (uid, organization_id) => {
+    let member = null;
+    const members = (await getUserMemberDocs(uid)).docs;
+
+    // Check each member doc to match organizations
+    for(let m in members) {
+        let org = members[m].ref.parent.parent;
+        if (org.id == organization_id) {
+            member = members[m].ref;
+        }
+    }
+
+    // Return if user is not apart of organization
+    if (member == null) {
+        throw new functions.https.HttpsError("not-found", "The user does not belong to the provided organization.")
+    }
+
+    return member;
 }
 
 const getUserShifts = async (uid, callback=(shift) => {}, time_start=new Date(), time_end = new Date(Date.now() + TIME_WEEK)) => {
@@ -120,12 +140,81 @@ exports.hoursAccumulated = functions.https.onCall(( async (data, context) => {
 }))
 
 exports.punch = functions.https.onCall((async (data, context) => {
+
     const {organization_id, message = ""} = data;
-    return "Work in progress..."
+    const uid = verifyUid(context);
+
+    // Validators
+    if (organization_id == null || organization_id.length <= 0) {
+        throw new functions.https.HttpsError("invalid-argument", "The function 'organization_id' is required but not provided.");
+    }
+
+    try {
+
+        const member = await getMemberFromOrgDoc(uid, organization_id);
+
+        // Punch the user depending on current status
+        const status = (await member.get()).data().status;
+        if (status == "active") {
+            await member.update({status: "working"})
+            return {isWorking: true}
+        } else if (status == "working" || status == "break") {
+            await member.update({status: "active"})
+            return {isWorking: false}
+        } else {
+            throw new functions.https.HttpsError("permission-denied", "The user must be active at the organization.")
+        }
+
+        // Non-retrievable return!
+        return "I'm still standing, yeah yeah yeah!";
+
+    } catch (e) {
+        if (e instanceof functions.https.HttpsError) {
+            throw e;
+        } else {
+            console.error(e);
+            throw new functions.https.HttpsError('internal', MESSAGE_INTERNAL);
+        }
+    }
 }))
 
-exports.break = functions.https.onCall(((data, context) => {
-    return "Work in progress..."
+exports.break = functions.https.onCall((async (data, context) => {
+
+    const {organization_id, message = ""} = data;
+    const uid = verifyUid(context);
+
+    // Validators
+    if (organization_id == null || organization_id.length <= 0) {
+        throw new functions.https.HttpsError("invalid-argument", "The function 'organization_id' is required but not provided.");
+    }
+
+    try {
+
+        const member = await getMemberFromOrgDoc(uid, organization_id);
+
+        // Break only if user is currently working
+        const status = (await member.get()).data().status;
+        if (status == "working") {
+            await member.update({status: "break"})
+            return {status: "break"}
+        } else if (status == "break") {
+            await member.update({status: "working"})
+            return {status: "working"}
+        } else {
+            throw new functions.https.HttpsError("permission-denied", "The user must be currently working.")
+        }
+
+        // Non-retrievable return!
+        return "I'm still standing, yeah yeah yeah!";
+
+    } catch (e) {
+        if (e instanceof functions.https.HttpsError) {
+            throw e;
+        } else {
+            console.error(e);
+            throw new functions.https.HttpsError('internal', MESSAGE_INTERNAL);
+        }
+    }
 }))
 
 exports.requestVacation = functions.https.onCall(((data, context) => {
