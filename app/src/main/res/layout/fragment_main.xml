@@ -22,12 +22,12 @@
         tools:layout_constraintTop_creator="1" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/statusText"
         android:layout_width="197dp"
         android:layout_height="94dp"
-        android:background="@color/red"
+        android:background="@color/light_grey"
         android:gravity="center"
-        android:text="LATE"
+        android:text="@string/loading"
         android:textColor="@color/white"
         android:textSize="25sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -37,7 +37,21 @@
         app:layout_constraintVertical_bias="0.091" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/punchOut"
+        android:layout_width="129dp"
+        android:layout_height="36dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="32dp"
+        android:foregroundGravity="center_horizontal"
+        android:gravity="center_horizontal"
+        android:text="Punch Out"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/statusText" />
+
+    <Button
+        android:id="@+id/punchIn"
         android:layout_width="129dp"
         android:layout_height="36dp"
         android:layout_gravity="center"
@@ -48,7 +62,35 @@
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        app:layout_constraintTop_toBottomOf="@+id/statusText" />
+
+    <Button
+        android:id="@+id/offBreak"
+        android:layout_width="150dp"
+        android:layout_height="36dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="68dp"
+        android:foregroundGravity="center_horizontal"
+        android:gravity="center_horizontal"
+        android:text="Come Back"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/statusText" />
+
+    <Button
+        android:id="@+id/onBreak"
+        android:layout_width="150dp"
+        android:layout_height="36dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="68dp"
+        android:foregroundGravity="center_horizontal"
+        android:gravity="center_horizontal"
+        android:text="Go On Break"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/statusText" />
 
     <TextView
         android:id="@+id/currentTime"
