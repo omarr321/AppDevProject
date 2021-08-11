@@ -11,9 +11,11 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         android:gravity="center_vertical"
-        android:paddingLeft="@dimen/activity_horizontal_margin">
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp">
 
         <LinearLayout
             android:id="@+id/linearLayout2"
@@ -30,78 +32,86 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/payRate"
-                android:textColor="#FFFFFF" />
+                android:textColor="#FFFFFF"
+                android:textSize="24sp" />
 
             <TextView
                 android:id="@+id/txtPayType"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/PayType"
-                android:textColor="#FFFFFF" />
+                android:textColor="#FFFFFF"
+                android:textSize="24sp" />
         </LinearLayout>
 
         <LinearLayout
-        android:id="@+id/linearLayout3"
-        android:layout_width="368dp"
-        android:layout_height="71dp"
-        android:layout_marginTop="18dp"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
+            android:id="@+id/linearLayout3"
+            android:layout_width="365dp"
+            android:layout_height="113dp"
+            android:layout_marginTop="18dp"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
 
             <TextView
                 android:id="@+id/txtCurrHW"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/currentHW"
-                android:textColor="#FFFFFF" />
+                android:textColor="#FFFFFF"
+                android:textSize="24sp" />
 
             <TextView
                 android:id="@+id/txtCurrGI"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/currentGI"
-                android:textColor="#FFFFFF" />
+                android:textColor="#FFFFFF"
+                android:textSize="24sp" />
 
             <TextView
                 android:id="@+id/txtCurrNI"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/currentNI"
-                android:textColor="#FFFFFF" />
-    </LinearLayout>
+                android:textColor="#FFFFFF"
+                android:textSize="24sp" />
+        </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="374dp"
-        android:layout_height="97dp"
-        android:layout_marginTop="18dp"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
+        <LinearLayout
+            android:layout_width="371dp"
+            android:layout_height="125dp"
+            android:layout_marginTop="18dp"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
 
-        <TextView
-            android:id="@+id/txtProjectedHW"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/projectedHW"
-            android:textColor="#FFFFFF" />
+            <TextView
+                android:id="@+id/txtProjectedHW"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/projectedHW"
+                android:textColor="#FFFFFF"
+                android:textSize="24sp" />
 
-        <TextView
-            android:id="@+id/txtProjectedGI"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/projectedGI"
-            android:textColor="#FFFFFF" />
+            <TextView
+                android:id="@+id/txtProjectedGI"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/projectedGI"
+                android:textColor="#FFFFFF"
+                android:textSize="24sp" />
 
-        <TextView
-            android:id="@+id/txtProjectedNI"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/projectedNI"
-            android:textColor="#FFFFFF" />
-    </LinearLayout>
+            <TextView
+                android:id="@+id/txtProjectedNI"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/projectedNI"
+                android:textColor="#FFFFFF"
+                android:textSize="24sp"/>
+        </LinearLayout>
 
     </LinearLayout>
 

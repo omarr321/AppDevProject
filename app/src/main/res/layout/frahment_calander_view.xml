@@ -34,7 +34,7 @@
         android:layout_marginBottom="115dp"
         android:background="@color/white"
         android:gravity="center"
-        android:text="9:30 AM - 10:30 PM"
+        android:text="@string/loading"
         android:textColor="#000000"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"

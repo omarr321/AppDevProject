@@ -409,6 +409,20 @@ public class ScheduleViewFragment extends Fragment {
     };
 
     private  View.OnClickListener prevWeek = v -> {
+        day1WH.setTypeface(Typeface.DEFAULT);
+        day1Text.setTypeface(Typeface.DEFAULT);
+        day2WH.setTypeface(Typeface.DEFAULT);
+        day2Text.setTypeface(Typeface.DEFAULT);
+        day3WH.setTypeface(Typeface.DEFAULT);
+        day3Text.setTypeface(Typeface.DEFAULT);
+        day4WH.setTypeface(Typeface.DEFAULT);
+        day4Text.setTypeface(Typeface.DEFAULT);
+        day5WH.setTypeface(Typeface.DEFAULT);
+        day5Text.setTypeface(Typeface.DEFAULT);
+        day6WH.setTypeface(Typeface.DEFAULT);
+        day6Text.setTypeface(Typeface.DEFAULT);
+        day7WH.setTypeface(Typeface.DEFAULT);
+        day7Text.setTypeface(Typeface.DEFAULT);
         cal.setTime(startDate);
         cal.add(Calendar.DAY_OF_WEEK, -7);
         formatChange(true,cal.getTime().getTime());
@@ -416,6 +430,20 @@ public class ScheduleViewFragment extends Fragment {
     };
 
     private  View.OnClickListener nextWeek = v -> {
+        day1WH.setTypeface(Typeface.DEFAULT);
+        day1Text.setTypeface(Typeface.DEFAULT);
+        day2WH.setTypeface(Typeface.DEFAULT);
+        day2Text.setTypeface(Typeface.DEFAULT);
+        day3WH.setTypeface(Typeface.DEFAULT);
+        day3Text.setTypeface(Typeface.DEFAULT);
+        day4WH.setTypeface(Typeface.DEFAULT);
+        day4Text.setTypeface(Typeface.DEFAULT);
+        day5WH.setTypeface(Typeface.DEFAULT);
+        day5Text.setTypeface(Typeface.DEFAULT);
+        day6WH.setTypeface(Typeface.DEFAULT);
+        day6Text.setTypeface(Typeface.DEFAULT);
+        day7WH.setTypeface(Typeface.DEFAULT);
+        day7Text.setTypeface(Typeface.DEFAULT);
         cal.setTime(startDate);
         cal.add(Calendar.DAY_OF_WEEK,7);
         formatChange(true,cal.getTime().getTime());
