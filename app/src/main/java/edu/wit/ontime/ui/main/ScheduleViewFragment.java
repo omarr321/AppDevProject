@@ -409,7 +409,7 @@ public class ScheduleViewFragment extends Fragment {
             case 11:
             case 12:
             case 13:
-                return i + "th: ";
+                return "th: ";
             default:
                 return suffixes[i % 10];
 
