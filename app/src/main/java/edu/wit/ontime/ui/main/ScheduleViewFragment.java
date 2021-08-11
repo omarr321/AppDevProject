@@ -2,6 +2,7 @@ package edu.wit.ontime.ui.main;
 
 import android.app.Dialog;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.icu.util.ULocale;
 import android.os.Build;
@@ -70,6 +71,7 @@ public class ScheduleViewFragment extends Fragment {
     private FirebaseFunctions mFunctions;
     private Date startDate;
     private Date endDate;
+    private Date currDate;
     int yearR;
     Calendar cal;
     String authTok;
@@ -85,10 +87,15 @@ public class ScheduleViewFragment extends Fragment {
 
         Bundle temp = getArguments();
         startDate = new Date(temp.getLong("startDate"));
-
-
-
-
+        currDate = new Date(temp.getLong("startDate"));
+        Calendar currD = Calendar.getInstance();
+        currD.setTime(currDate);
+        currD.set(Calendar.HOUR, 0);
+        currD.set(Calendar.MINUTE, 0);
+        currD.set(Calendar.SECOND, 0);
+        currD.set(Calendar.MILLISECOND, 0);
+        currD.set(Calendar.AM_PM, Calendar.AM);
+        currDate = currD.getTime();
 
 
         View v = inflater.inflate(R.layout.fragment_schedule_view, container, false);
@@ -232,66 +239,95 @@ public class ScheduleViewFragment extends Fragment {
                                 String spacer = ", ";
                                 String ext = "th: ";
 
-                                DayOfWeek.of(1).getDisplayName(TextStyle.SHORT, Locale.getDefault());
                                 day1Text.setText(DayOfWeek.of(cal.get(Calendar.DAY_OF_WEEK)+6).getDisplayName(TextStyle.SHORT, Locale.getDefault()) + spacer + (cal.get(Calendar.DAY_OF_MONTH)) + ext);
                                 if (shiftsStr[0].equals(" ")) {
                                     day1WH.setText("No Shift");
                                 } else {
                                     day1WH.setText(shiftsStr[0]);
                                 }
+                                Log.d("SCHEDULE", "Cal date: " + cal.getTime().toString() + ", currDate: " + currDate.toString());
+                                if (cal.getTime().equals(currDate)) {
+                                    day1WH.setTypeface(Typeface.DEFAULT_BOLD);
+                                    day1Text.setTypeface(Typeface.DEFAULT_BOLD);
+                                }
+
 
                                 cal.add(Calendar.DAY_OF_WEEK, 1);
-                                DayOfWeek.of(1).getDisplayName(TextStyle.SHORT, Locale.getDefault());
                                 day2Text.setText(DayOfWeek.of((cal.get(Calendar.DAY_OF_WEEK)+6)%7).getDisplayName(TextStyle.SHORT, Locale.getDefault()) + spacer + (cal.get(Calendar.DAY_OF_MONTH)) + ext);
                                 if (shiftsStr[1].equals(" ")) {
                                     day2WH.setText("No Shift");
                                 } else {
                                     day2WH.setText(shiftsStr[1]);
                                 }
+                                Log.d("SCHEDULE", "Cal date: " + cal.getTime().toString() + ", currDate: " + currDate.toString());
+                                if (cal.getTime().equals(currDate)) {
+                                    day2WH.setTypeface(Typeface.DEFAULT_BOLD);
+                                    day2Text.setTypeface(Typeface.DEFAULT_BOLD);
+                                }
 
                                 cal.add(Calendar.DAY_OF_WEEK, 1);
-                                DayOfWeek.of(1).getDisplayName(TextStyle.SHORT, Locale.getDefault());
                                 day3Text.setText(DayOfWeek.of((cal.get(Calendar.DAY_OF_WEEK)+6)%7).getDisplayName(TextStyle.SHORT, Locale.getDefault()) + spacer + (cal.get(Calendar.DAY_OF_MONTH)) + ext);
                                 if (shiftsStr[2].equals(" ")) {
                                     day3WH.setText("No Shift");
                                 } else {
                                     day3WH.setText(shiftsStr[2]);
                                 }
+                                Log.d("SCHEDULE", "Cal date: " + cal.getTime().toString() + ", currDate: " + currDate.toString());
+                                if (cal.getTime().equals(currDate)) {
+                                    day3WH.setTypeface(null, Typeface.BOLD);
+                                    day3Text.setTypeface(null, Typeface.BOLD);
+                                }
 
                                 cal.add(Calendar.DAY_OF_WEEK, 1);
-                                DayOfWeek.of(1).getDisplayName(TextStyle.SHORT, Locale.getDefault());
                                 day4Text.setText(DayOfWeek.of((cal.get(Calendar.DAY_OF_WEEK)+6)%7).getDisplayName(TextStyle.SHORT, Locale.getDefault()) + spacer + (cal.get(Calendar.DAY_OF_MONTH)) + ext);
                                 if (shiftsStr[3].equals(" ")) {
                                     day4WH.setText("No Shift");
                                 } else {
                                     day4WH.setText(shiftsStr[3]);
                                 }
+                                Log.d("SCHEDULE", "Cal date: " + cal.getTime().toString() + ", currDate: " + currDate.toString());
+                                if (cal.getTime().equals(currDate)) {
+                                    day4WH.setTypeface(null, Typeface.BOLD);
+                                    day4Text.setTypeface(null, Typeface.BOLD);
+                                }
 
                                 cal.add(Calendar.DAY_OF_WEEK, 1);
-                                DayOfWeek.of(1).getDisplayName(TextStyle.SHORT, Locale.getDefault());
                                 day5Text.setText(DayOfWeek.of((cal.get(Calendar.DAY_OF_WEEK)+6)%7).getDisplayName(TextStyle.SHORT, Locale.getDefault()) + spacer + (cal.get(Calendar.DAY_OF_MONTH)) + ext);
                                 if (shiftsStr[4].equals(" ")) {
                                     day5WH.setText("No Shift");
                                 } else {
                                     day5WH.setText(shiftsStr[4]);
                                 }
+                                Log.d("SCHEDULE", "Cal date: " + cal.getTime().toString() + ", currDate: " + currDate.toString());
+                                if (cal.getTime().equals(currDate)) {
+                                    day5WH.setTypeface(null, Typeface.BOLD);
+                                    day5Text.setTypeface(null, Typeface.BOLD);
+                                }
 
                                 cal.add(Calendar.DAY_OF_WEEK, 1);
-                                DayOfWeek.of(1).getDisplayName(TextStyle.SHORT, Locale.getDefault());
                                 day6Text.setText(DayOfWeek.of((cal.get(Calendar.DAY_OF_WEEK)+6)%7).getDisplayName(TextStyle.SHORT, Locale.getDefault()) + spacer + (cal.get(Calendar.DAY_OF_MONTH)) + ext);
                                 if (shiftsStr[5].equals(" ")) {
                                     day6WH.setText("No Shift");
                                 } else {
                                     day6WH.setText(shiftsStr[5]);
                                 }
+                                Log.d("SCHEDULE", "Cal date: " + cal.getTime().toString() + ", currDate: " + currDate.toString());
+                                if (cal.getTime().equals(currDate)) {
+                                    day6WH.setTypeface(null, Typeface.BOLD);
+                                    day6Text.setTypeface(null, Typeface.BOLD);
+                                }
 
                                 cal.add(Calendar.DAY_OF_WEEK, 1);
-                                DayOfWeek.of(1).getDisplayName(TextStyle.SHORT, Locale.getDefault());
                                 day7Text.setText(DayOfWeek.of((cal.get(Calendar.DAY_OF_WEEK)+6)%7).getDisplayName(TextStyle.SHORT, Locale.getDefault()) + spacer + (cal.get(Calendar.DAY_OF_MONTH)) + ext);
                                 if (shiftsStr[6].equals(" ")) {
                                     day7WH.setText("No Shift");
                                 } else {
                                     day7WH.setText(shiftsStr[6]);
+                                }
+                                Log.d("SCHEDULE", "Cal date: " + cal.getTime().toString() + ", currDate: " + currDate.toString());
+                                if (cal.getTime().equals(currDate)) {
+                                    day7WH.setTypeface(null, Typeface.BOLD);
+                                    day7Text.setTypeface(null, Typeface.BOLD);
                                 }
 
                             } catch (JSONException e) {

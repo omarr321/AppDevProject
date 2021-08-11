@@ -51,7 +51,9 @@ public class HomeFragment extends Fragment {
     private TextView statusText;
     private JSONObject member;
     private String status = " ";
-    private int yellow, blue, green, light_green;
+    private int yellow, blue, green, light_green, red;
+    private Date currShiftStart, currShiftEnd;
+    private JSONObject currOrg;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -62,6 +64,7 @@ public class HomeFragment extends Fragment {
         blue = ResourcesCompat.getColor(getResources(), R.color.teal_700, null);
         green = ResourcesCompat.getColor(getResources(), R.color.green, null);
         light_green = ResourcesCompat.getColor(getResources(), R.color.light_green, null);
+        red = ResourcesCompat.getColor(getResources(), R.color.red, null);
 
         punchIn = v.findViewById(R.id.punchIn);
         punchOut = v.findViewById(R.id.punchOut);
@@ -101,7 +104,7 @@ public class HomeFragment extends Fragment {
                                 FirebaseFunctionsException.Code code = ffe.getCode();
                                 Object details = ffe.getDetails();
                             }
-                            Log.d("HOME Object Details", e.toString());
+                            Log.d("HOME Shift Details", e.toString());
                         }else{
                             Log.d("HOME dataGotten Shifts", task.getResult());
                             try {
@@ -121,6 +124,8 @@ public class HomeFragment extends Fragment {
                                     String endDateFormat;
                                     startDateFormat = FormatDateToString(shiftTimes[0]);
                                     endDateFormat = FormatDateToString(shiftTimes[1]);
+                                    currShiftStart = shiftTimes[0];
+                                    currShiftEnd = shiftTimes[1];
                                     String shiftView = startDateFormat + " - " + endDateFormat;
                                     Log.d("HOME formatted str", shiftView);
                                     schedule.setText(shiftView);
@@ -150,7 +155,7 @@ public class HomeFragment extends Fragment {
                                 FirebaseFunctionsException.Code code = ffe.getCode();
                                 Object details = ffe.getDetails();
                             }
-                            Log.d("HOME Object Details", e.toString());
+                            Log.d("HOME Hours Details", e.toString());
                         }else{
                             try {
                                 JSONObject totalHour = new JSONObject(task.getResult());
@@ -175,12 +180,13 @@ public class HomeFragment extends Fragment {
                                                     FirebaseFunctionsException.Code code = ffe.getCode();
                                                     Object details = ffe.getDetails();
                                                 }
-                                                Log.d("HOME Object Details", e.toString());
+                                                Log.d("HOME Org Details", e.toString());
                                             }else{
                                                 try{
                                                     JSONArray temp = new JSONArray(task.getResult());
 
                                                     JSONObject org = (JSONObject) temp.get(0);
+                                                    currOrg = org;
 
                                                     Log.d("HOME Org Data", org.toString());
 
@@ -230,7 +236,7 @@ public class HomeFragment extends Fragment {
                                     FirebaseFunctionsException.Code code = ffe.getCode();
                                     Object details = ffe.getDetails();
                                 }
-                                Log.d("HOME Object Details", e.toString());
+                                Log.d("HOME PunchIn Details", e.toString());
                             }else{
 
                             }
@@ -252,7 +258,7 @@ public class HomeFragment extends Fragment {
                                     FirebaseFunctionsException.Code code = ffe.getCode();
                                     Object details = ffe.getDetails();
                                 }
-                                Log.d("HOME Object Details", e.toString());
+                                Log.d("HOME PunchOut Details", e.toString());
                             }else{
 
                             }
@@ -274,7 +280,7 @@ public class HomeFragment extends Fragment {
                                     FirebaseFunctionsException.Code code = ffe.getCode();
                                     Object details = ffe.getDetails();
                                 }
-                                Log.d("HOME Object Details", e.toString());
+                                Log.d("HOME onBreak Details", e.toString());
                             }else{
 
                             }
@@ -296,7 +302,7 @@ public class HomeFragment extends Fragment {
                                     FirebaseFunctionsException.Code code = ffe.getCode();
                                     Object details = ffe.getDetails();
                                 }
-                                Log.d("HOME Object Details", e.toString());
+                                Log.d("HOME offBreak Details", e.toString());
                             }else{
 
                             }
@@ -308,6 +314,7 @@ public class HomeFragment extends Fragment {
         return v;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void updateStatus() {
         if (status.equals(" ")) {
             try {
@@ -330,8 +337,15 @@ public class HomeFragment extends Fragment {
                     statusText.setText("DAY OFF");
                     statusText.setBackgroundColor(blue);
                 } else {
-                    statusText.setText("PUNCHED OUT");
-                    statusText.setBackgroundColor(yellow);
+                    Instant i = Instant.now();
+                    Date currTime = new Date(i.toEpochMilli());
+                    if (currTime.getTime() >= currShiftStart.getTime() && currTime.getTime() <= currShiftEnd.getTime()) {
+                        statusText.setText("LATE");
+                        statusText.setBackgroundColor(red);
+                    } else {
+                        statusText.setText("PUNCHED OUT");
+                        statusText.setBackgroundColor(yellow);
+                    }
                 }
                 break;
             case "working":
@@ -373,8 +387,16 @@ public class HomeFragment extends Fragment {
 
 
     private Task<String> punch(String text) {
+        Map<String, Object> data = new HashMap<>();
+        try {
+            JSONObject orgCurr = (JSONObject) currOrg.get("org");
+            data.put("organization_id", orgCurr.getString("org_id"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
         return mFunctions.getHttpsCallable("punch")
-                .call()
+                .call(data)
                 .continueWith(task -> {
                     Gson g = new Gson();
                     return g.toJson(task.getResult().getData());
@@ -382,8 +404,16 @@ public class HomeFragment extends Fragment {
     }
 
     private Task<String> pbreak(String text) {
+        Map<String, Object> data = new HashMap<>();
+        try {
+            JSONObject orgCurr = (JSONObject) currOrg.get("org");
+            data.put("organization_id", orgCurr.getString("org_id"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
         return mFunctions.getHttpsCallable("break")
-                .call()
+                .call(data)
                 .continueWith(task -> {
                     Gson g = new Gson();
                     return g.toJson(task.getResult().getData());
@@ -394,18 +424,21 @@ public class HomeFragment extends Fragment {
         Map<String, Object> data = new HashMap<>();
         Calendar cal = Calendar.getInstance();
         cal.setTime(startDate);
-        cal.set(Calendar.DAY_OF_WEEK, -1);
+        //cal.set(Calendar.DAY_OF_WEEK, -1);
         cal.set(Calendar.HOUR, 0);
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);
+        cal.set(Calendar.AM_PM, Calendar.AM);
 
         data.put("time_start", cal.getTime().getTime());
 
+        //cal.set(Calendar.DAY_OF_WEEK, 1);
         cal.set(Calendar.HOUR, 23);
         cal.set(Calendar.MINUTE, 59);
         cal.set(Calendar.SECOND, 59);
         cal.set(Calendar.MILLISECOND, 999);
+        cal.set(Calendar.AM_PM, Calendar.PM);
         data.put("time_end", cal.getTime().getTime());
 
         //System.out.println(startDate.getTime() + "Here!!! - home");
@@ -432,18 +465,19 @@ public class HomeFragment extends Fragment {
         Map<String, Object> data = new HashMap<>();
         Calendar cal = Calendar.getInstance();
         cal.setTime(startDate);
-        cal.set(Calendar.DAY_OF_WEEK, -1);
+        //cal.set(Calendar.DAY_OF_WEEK, -1);
         cal.set(Calendar.HOUR, 0);
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);
-
+        cal.set(Calendar.AM_PM, Calendar.AM);
         data.put("time_start", cal.getTime().getTime());
 
         cal.set(Calendar.HOUR, 23);
         cal.set(Calendar.MINUTE, 59);
         cal.set(Calendar.SECOND, 59);
         cal.set(Calendar.MILLISECOND, 999);
+        cal.set(Calendar.AM_PM, Calendar.PM);
         data.put("time_end", cal.getTime().getTime());
 
         return mFunctions.getHttpsCallable("hoursAccumulated")

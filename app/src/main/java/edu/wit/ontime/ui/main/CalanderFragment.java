@@ -32,6 +32,9 @@ import org.json.JSONObject;
 import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.Month;
+import java.time.MonthDay;
+import java.time.Year;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -65,99 +68,13 @@ public class CalanderFragment extends Fragment {
 
         layout = v.findViewById(R.id.test321);
 
+
+        Calendar curr = Calendar.getInstance();
+        curr.setTime(new Date(Instant.now().toEpochMilli()));
+        setDateTime(curr.get(Calendar.YEAR), curr.get(Calendar.MONTH), curr.get(Calendar.DAY_OF_MONTH));
         view.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
-
-            //Date startDate = new Date(Instant.now().toEpochMilli());
-
-            String  curDate = String.valueOf(dayOfMonth);
-            String  Year = String.valueOf(year);
-            String  Month = String.valueOf(month);
-            GregorianCalendar cal = new GregorianCalendar(year, month, dayOfMonth);
-
-
-            cal.set(Calendar.AM_PM, Calendar.AM);
-            cal.set(Calendar.HOUR, 0);
-            cal.set(Calendar.MINUTE, 0);
-            cal.set(Calendar.SECOND, 0);
-            cal.set(Calendar.MILLISECOND, 0);
-
-            startDate = cal.getTime();
-
-            cal.set(Calendar.AM_PM, Calendar.PM);
-            cal.set(Calendar.HOUR, 11);
-            cal.set(Calendar.MINUTE, 59);
-            cal.set(Calendar.SECOND, 59);
-            cal.set(Calendar.MILLISECOND, 999);
-
-            endDate = cal.getTime();
-
-            long epochCurrentDay = cal.getTime().getTime();
-
-
-            addMessage(" ")
-                    .addOnCompleteListener(new OnCompleteListener<String>() {
-
-                        @Override
-                        public void onComplete(@NonNull Task<String> task) {
-                            changeDate.setText("No Shift");
-                            if (!task.isSuccessful()) {
-                                Exception e = task.getException();
-                                if (e instanceof FirebaseFunctionsException) {
-                                    FirebaseFunctionsException ffe = (FirebaseFunctionsException) e;
-                                    FirebaseFunctionsException.Code code = ffe.getCode();
-                                    Object details = ffe.getDetails();
-                                }
-
-
-                            }else{
-
-                                try{
-                                JSONArray temp = new JSONArray(task.getResult());
-                                JSONArray shiftsArr = new JSONArray();
-                                for (int i = 0; i < temp.length(); i++) {
-                                    shiftsArr.put(temp.get(i));
-                                }
-                                String[] shiftsStr = {" "," "," "," "," "," "," "};
-                                for (int i = 0; i < shiftsArr.length(); i++) {
-                                    Log.d("SCHEDULE shift " + (i+1), shiftsArr.get(i).toString());
-                                    Date[] shiftTimes = ShiftToDate((JSONObject) shiftsArr.get(i));
-                                    Log.d("SCHEDULE shift start", shiftTimes[0].toString());
-                                    Log.d("SCHEDULE shift end", shiftTimes[1].toString());
-
-                                    String startDateFormat;
-                                    String endDateFormat;
-                                    startDateFormat = FormatDateToString(shiftTimes[0]);
-                                    endDateFormat = FormatDateToString(shiftTimes[1]);
-                                    Log.d("SCHEDULE formatted str",startDateFormat + " - " + endDateFormat);
-                                    Calendar cal = Calendar.getInstance();
-                                    cal.setTime(shiftTimes[0]);
-                                    int day = cal.get(Calendar.DAY_OF_WEEK);
-                                    shiftsStr[day-1] = startDateFormat + " - " + endDateFormat;
-
-                                    //System.out.println(shiftsStr[0]);
-                                    dateFormat = startDateFormat + " - " + endDateFormat;
-                                    System.out.println(dateFormat);
-                                    if(dateFormat.equals(" ")){
-                                        changeDate.setText("No Shift");
-                                    }else{
-                                        changeDate.setText(dateFormat);
-                                    }
-
-                                }} catch (Exception e) {
-                                    System.out.println(e.getMessage());
-                                }
-
-                            }
-
-                        }
-                    });
-
-
+            setDateTime(year, month, dayOfMonth);
         });
-
-
-
-
         return v;
 
 
@@ -206,7 +123,92 @@ public class CalanderFragment extends Fragment {
         // The callback can be enabled or disabled here or in handleOnBackPressed()
     }
 
+    private void setDateTime(int year, int month, int dayOfMonth){
+        //Date startDate = new Date(Instant.now().toEpochMilli());
 
+        String  curDate = String.valueOf(dayOfMonth);
+        String  Year = String.valueOf(year);
+        String  Month = String.valueOf(month);
+        GregorianCalendar cal = new GregorianCalendar(year, month, dayOfMonth);
+
+
+        cal.set(Calendar.AM_PM, Calendar.AM);
+        cal.set(Calendar.HOUR, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+
+        startDate = cal.getTime();
+
+        cal.set(Calendar.AM_PM, Calendar.PM);
+        cal.set(Calendar.HOUR, 11);
+        cal.set(Calendar.MINUTE, 59);
+        cal.set(Calendar.SECOND, 59);
+        cal.set(Calendar.MILLISECOND, 999);
+
+        endDate = cal.getTime();
+
+        long epochCurrentDay = cal.getTime().getTime();
+
+
+        addMessage(" ")
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        changeDate.setText("No Shift");
+                        if (!task.isSuccessful()) {
+                            Exception e = task.getException();
+                            if (e instanceof FirebaseFunctionsException) {
+                                FirebaseFunctionsException ffe = (FirebaseFunctionsException) e;
+                                FirebaseFunctionsException.Code code = ffe.getCode();
+                                Object details = ffe.getDetails();
+                            }
+
+
+                        }else{
+
+                            try{
+                                JSONArray temp = new JSONArray(task.getResult());
+                                JSONArray shiftsArr = new JSONArray();
+                                for (int i = 0; i < temp.length(); i++) {
+                                    shiftsArr.put(temp.get(i));
+                                }
+                                String[] shiftsStr = {" "," "," "," "," "," "," "};
+                                for (int i = 0; i < shiftsArr.length(); i++) {
+                                    Log.d("CAL shift " + (i+1), shiftsArr.get(i).toString());
+                                    Date[] shiftTimes = ShiftToDate((JSONObject) shiftsArr.get(i));
+                                    Log.d("CAL shift start", shiftTimes[0].toString());
+                                    Log.d("CAL shift end", shiftTimes[1].toString());
+
+                                    String startDateFormat;
+                                    String endDateFormat;
+                                    startDateFormat = FormatDateToString(shiftTimes[0]);
+                                    endDateFormat = FormatDateToString(shiftTimes[1]);
+                                    Log.d("CAL formatted str",startDateFormat + " - " + endDateFormat);
+                                    Calendar cal = Calendar.getInstance();
+                                    cal.setTime(shiftTimes[0]);
+                                    int day = cal.get(Calendar.DAY_OF_WEEK);
+                                    shiftsStr[day-1] = startDateFormat + " - " + endDateFormat;
+
+                                    //System.out.println(shiftsStr[0]);
+                                    dateFormat = startDateFormat + " - " + endDateFormat;
+                                    System.out.println(dateFormat);
+                                    if(dateFormat.equals(" ")){
+                                        changeDate.setText("No Shift");
+                                    }else{
+                                        changeDate.setText(dateFormat);
+                                    }
+
+                                }} catch (Exception e) {
+                                System.out.println(e.getMessage());
+                            }
+
+                        }
+
+                    }
+                });
+    }
 
     public static CalanderFragment newInstance(String text) {
 
@@ -233,6 +235,4 @@ public class CalanderFragment extends Fragment {
 
         getChildFragmentManager().beginTransaction().replace(R.id.test321, test).commit();
     };
-
-
 }
