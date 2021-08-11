@@ -113,7 +113,7 @@ public class PayStubFragment extends Fragment {
                                 String type = pay.getString("type");
                                 rateOfPay = dailyPay;
                                 typeOfPay = type;
-                                payRate.setText("Pay Rate: $" + rateOfPay);
+                                payRate.setText("Pay Rate: $" + df.format(rateOfPay));
                                 payType.setText("Pay Type: " + typeOfPay);
                                 projectedAmount(false);
                                 Calendar currentDay = Calendar.getInstance();
