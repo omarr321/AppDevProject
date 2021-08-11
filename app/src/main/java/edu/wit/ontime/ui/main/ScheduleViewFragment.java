@@ -240,6 +240,7 @@ public class ScheduleViewFragment extends Fragment {
                                 String spacer = ", ";
                                 String ext = "th: ";
 
+                                ext = ordinal((cal.get(Calendar.DAY_OF_MONTH)));
                                 day1Text.setText(DayOfWeek.of(cal.get(Calendar.DAY_OF_WEEK)+6).getDisplayName(TextStyle.SHORT, Locale.getDefault()) + spacer + (cal.get(Calendar.DAY_OF_MONTH)) + ext);
                                 if (shiftsStr[0].equals(" ")) {
                                     day1WH.setText("No Shift");
@@ -256,6 +257,7 @@ public class ScheduleViewFragment extends Fragment {
 
 
                                 cal.add(Calendar.DAY_OF_WEEK, 1);
+                                ext = ordinal((cal.get(Calendar.DAY_OF_MONTH)));
                                 day2Text.setText(DayOfWeek.of((cal.get(Calendar.DAY_OF_WEEK)+6)%7).getDisplayName(TextStyle.SHORT, Locale.getDefault()) + spacer + (cal.get(Calendar.DAY_OF_MONTH)) + ext);
                                 if (shiftsStr[1].equals(" ")) {
                                     day2WH.setText("No Shift");
@@ -271,6 +273,7 @@ public class ScheduleViewFragment extends Fragment {
                                 }
 
                                 cal.add(Calendar.DAY_OF_WEEK, 1);
+                                ext = ordinal((cal.get(Calendar.DAY_OF_MONTH)));
                                 day3Text.setText(DayOfWeek.of((cal.get(Calendar.DAY_OF_WEEK)+6)%7).getDisplayName(TextStyle.SHORT, Locale.getDefault()) + spacer + (cal.get(Calendar.DAY_OF_MONTH)) + ext);
                                 if (shiftsStr[2].equals(" ")) {
                                     day3WH.setText("No Shift");
@@ -286,6 +289,7 @@ public class ScheduleViewFragment extends Fragment {
                                 }
 
                                 cal.add(Calendar.DAY_OF_WEEK, 1);
+                                ext = ordinal((cal.get(Calendar.DAY_OF_MONTH)));
                                 day4Text.setText(DayOfWeek.of((cal.get(Calendar.DAY_OF_WEEK)+6)%7).getDisplayName(TextStyle.SHORT, Locale.getDefault()) + spacer + (cal.get(Calendar.DAY_OF_MONTH)) + ext);
                                 if (shiftsStr[3].equals(" ")) {
                                     day4WH.setText("No Shift");
@@ -301,6 +305,7 @@ public class ScheduleViewFragment extends Fragment {
                                 }
 
                                 cal.add(Calendar.DAY_OF_WEEK, 1);
+                                ext = ordinal((cal.get(Calendar.DAY_OF_MONTH)));
                                 day5Text.setText(DayOfWeek.of((cal.get(Calendar.DAY_OF_WEEK)+6)%7).getDisplayName(TextStyle.SHORT, Locale.getDefault()) + spacer + (cal.get(Calendar.DAY_OF_MONTH)) + ext);
                                 if (shiftsStr[4].equals(" ")) {
                                     day5WH.setText("No Shift");
@@ -316,6 +321,7 @@ public class ScheduleViewFragment extends Fragment {
                                 }
 
                                 cal.add(Calendar.DAY_OF_WEEK, 1);
+                                ext = ordinal((cal.get(Calendar.DAY_OF_MONTH)));
                                 day6Text.setText(DayOfWeek.of((cal.get(Calendar.DAY_OF_WEEK)+6)%7).getDisplayName(TextStyle.SHORT, Locale.getDefault()) + spacer + (cal.get(Calendar.DAY_OF_MONTH)) + ext);
                                 if (shiftsStr[5].equals(" ")) {
                                     day6WH.setText("No Shift");
@@ -331,6 +337,7 @@ public class ScheduleViewFragment extends Fragment {
                                 }
 
                                 cal.add(Calendar.DAY_OF_WEEK, 1);
+                                ext = ordinal((cal.get(Calendar.DAY_OF_MONTH)));
                                 day7Text.setText(DayOfWeek.of((cal.get(Calendar.DAY_OF_WEEK)+6)%7).getDisplayName(TextStyle.SHORT, Locale.getDefault()) + spacer + (cal.get(Calendar.DAY_OF_MONTH)) + ext);
                                 if (shiftsStr[6].equals(" ")) {
                                     day7WH.setText("No Shift");
@@ -394,6 +401,19 @@ public class ScheduleViewFragment extends Fragment {
         f.setArguments(b);
 
         return f;
+    }
+
+    public static String ordinal(int i) {
+        String[] suffixes = new String[] { "th: ", "st: ", "nd: ", "rd: ", "th: ", "th: ", "th: ", "th: ", "th: ", "th: " };
+        switch (i % 100) {
+            case 11:
+            case 12:
+            case 13:
+                return i + "th: ";
+            default:
+                return suffixes[i % 10];
+
+        }
     }
 
 
