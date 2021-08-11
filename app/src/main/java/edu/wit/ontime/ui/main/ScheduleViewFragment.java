@@ -43,6 +43,7 @@ import com.google.gson.Gson;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -249,6 +250,8 @@ public class ScheduleViewFragment extends Fragment {
                                 if (cal.getTime().equals(currDate)) {
                                     day1WH.setTypeface(Typeface.DEFAULT_BOLD);
                                     day1Text.setTypeface(Typeface.DEFAULT_BOLD);
+                                }else{
+                                    unBold(day1WH,day1Text);
                                 }
 
 
@@ -263,6 +266,8 @@ public class ScheduleViewFragment extends Fragment {
                                 if (cal.getTime().equals(currDate)) {
                                     day2WH.setTypeface(Typeface.DEFAULT_BOLD);
                                     day2Text.setTypeface(Typeface.DEFAULT_BOLD);
+                                }else{
+                                    unBold(day2WH,day2Text);
                                 }
 
                                 cal.add(Calendar.DAY_OF_WEEK, 1);
@@ -276,6 +281,8 @@ public class ScheduleViewFragment extends Fragment {
                                 if (cal.getTime().equals(currDate)) {
                                     day3WH.setTypeface(null, Typeface.BOLD);
                                     day3Text.setTypeface(null, Typeface.BOLD);
+                                }else{
+                                    unBold(day3WH,day3Text);
                                 }
 
                                 cal.add(Calendar.DAY_OF_WEEK, 1);
@@ -289,6 +296,8 @@ public class ScheduleViewFragment extends Fragment {
                                 if (cal.getTime().equals(currDate)) {
                                     day4WH.setTypeface(null, Typeface.BOLD);
                                     day4Text.setTypeface(null, Typeface.BOLD);
+                                }else{
+                                    unBold(day4WH,day4Text);
                                 }
 
                                 cal.add(Calendar.DAY_OF_WEEK, 1);
@@ -302,6 +311,8 @@ public class ScheduleViewFragment extends Fragment {
                                 if (cal.getTime().equals(currDate)) {
                                     day5WH.setTypeface(null, Typeface.BOLD);
                                     day5Text.setTypeface(null, Typeface.BOLD);
+                                }else{
+                                    unBold(day5WH,day5Text);
                                 }
 
                                 cal.add(Calendar.DAY_OF_WEEK, 1);
@@ -315,6 +326,8 @@ public class ScheduleViewFragment extends Fragment {
                                 if (cal.getTime().equals(currDate)) {
                                     day6WH.setTypeface(null, Typeface.BOLD);
                                     day6Text.setTypeface(null, Typeface.BOLD);
+                                }else{
+                                    unBold(day6WH,day6Text);
                                 }
 
                                 cal.add(Calendar.DAY_OF_WEEK, 1);
@@ -328,6 +341,8 @@ public class ScheduleViewFragment extends Fragment {
                                 if (cal.getTime().equals(currDate)) {
                                     day7WH.setTypeface(null, Typeface.BOLD);
                                     day7Text.setTypeface(null, Typeface.BOLD);
+                                }else{
+                                    unBold(day7WH,day7Text);
                                 }
 
                             } catch (JSONException e) {
@@ -381,6 +396,11 @@ public class ScheduleViewFragment extends Fragment {
         return f;
     }
 
+
+    public void unBold(TextView WH, TextView text){
+        WH.setTypeface(Typeface.DEFAULT);
+        text.setTypeface(Typeface.DEFAULT);
+    }
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -398,6 +418,8 @@ public class ScheduleViewFragment extends Fragment {
         // The callback can be enabled or disabled here or in handleOnBackPressed()
     }
 
+
+
     private View.OnClickListener logoutUser1 = v -> {
 
         CalanderFragment test = new CalanderFragment();
@@ -409,20 +431,7 @@ public class ScheduleViewFragment extends Fragment {
     };
 
     private  View.OnClickListener prevWeek = v -> {
-        day1WH.setTypeface(Typeface.DEFAULT);
-        day1Text.setTypeface(Typeface.DEFAULT);
-        day2WH.setTypeface(Typeface.DEFAULT);
-        day2Text.setTypeface(Typeface.DEFAULT);
-        day3WH.setTypeface(Typeface.DEFAULT);
-        day3Text.setTypeface(Typeface.DEFAULT);
-        day4WH.setTypeface(Typeface.DEFAULT);
-        day4Text.setTypeface(Typeface.DEFAULT);
-        day5WH.setTypeface(Typeface.DEFAULT);
-        day5Text.setTypeface(Typeface.DEFAULT);
-        day6WH.setTypeface(Typeface.DEFAULT);
-        day6Text.setTypeface(Typeface.DEFAULT);
-        day7WH.setTypeface(Typeface.DEFAULT);
-        day7Text.setTypeface(Typeface.DEFAULT);
+
         cal.setTime(startDate);
         cal.add(Calendar.DAY_OF_WEEK, -7);
         formatChange(true,cal.getTime().getTime());
@@ -430,20 +439,6 @@ public class ScheduleViewFragment extends Fragment {
     };
 
     private  View.OnClickListener nextWeek = v -> {
-        day1WH.setTypeface(Typeface.DEFAULT);
-        day1Text.setTypeface(Typeface.DEFAULT);
-        day2WH.setTypeface(Typeface.DEFAULT);
-        day2Text.setTypeface(Typeface.DEFAULT);
-        day3WH.setTypeface(Typeface.DEFAULT);
-        day3Text.setTypeface(Typeface.DEFAULT);
-        day4WH.setTypeface(Typeface.DEFAULT);
-        day4Text.setTypeface(Typeface.DEFAULT);
-        day5WH.setTypeface(Typeface.DEFAULT);
-        day5Text.setTypeface(Typeface.DEFAULT);
-        day6WH.setTypeface(Typeface.DEFAULT);
-        day6Text.setTypeface(Typeface.DEFAULT);
-        day7WH.setTypeface(Typeface.DEFAULT);
-        day7Text.setTypeface(Typeface.DEFAULT);
         cal.setTime(startDate);
         cal.add(Calendar.DAY_OF_WEEK,7);
         formatChange(true,cal.getTime().getTime());
