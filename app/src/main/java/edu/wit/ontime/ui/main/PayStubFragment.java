@@ -85,6 +85,10 @@ public class PayStubFragment extends Fragment {
         payRate = v.findViewById(R.id.txtPayRate);
         payType = v.findViewById(R.id.txtPayType);
 
+        currentHours.setText("Current Hours Worked: " + "Loading...");
+        currentGross.setText("Current Gross Income: " + "Loading...");
+        currentNet.setText("Current Net Income: " + "Loading");
+
 
         getOrg("")
                 .addOnCompleteListener(new OnCompleteListener<String>() {
@@ -159,9 +163,9 @@ public class PayStubFragment extends Fragment {
                                 hours = totalHour.getInt("total_hours");
                                 Log.d("HOME Total Hours", String.valueOf(hours));
                                 if(currentOrProjected){
-                                    currentHours.setText("Projected Hours Worked: " + String.valueOf(hours));
-                                    currentGross.setText("Projected Gross Income: $" + (df.format(hours*rateOfPay)));
-                                    currentNet.setText("Projected Net Income: $" + (df.format(hours*rateOfPay*0.9375)));
+                                    currentHours.setText("Current Hours Worked: " + String.valueOf(hours));
+                                    currentGross.setText("Current Gross Income: $" + (df.format(hours*rateOfPay)));
+                                    currentNet.setText("Current Net Income: $" + (df.format(hours*rateOfPay*0.9375)));
                                 }else{
                                     projectedHours.setText("Projected Hours Worked: " + String.valueOf(hours));
                                     projectedGross.setText("Projected Gross Income: $" + (df.format(hours*rateOfPay)));
